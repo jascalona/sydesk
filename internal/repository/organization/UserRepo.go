@@ -3,7 +3,7 @@ package organization
 import (
 	"context"
 	"database/sql"
-	"gin-quickstart/pkg/domain"
+	"sydesk/pkg/domain"
 )
 
 type userRepo struct {

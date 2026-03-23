@@ -1,15 +1,26 @@
 package main
 
 import (
+	"github.com/joho/godotenv" // Librería para leer el .env
+	"log"
 	"sydesk/config"
 	"sydesk/internal/database"
 )
 
 func main() {
-	// load condfig
-	conf := config.LoadConfig()
-	dbConn := database.InitDB(conf.DatabaseURL)
+
+	// environment variable
+	if err := godotenv.Load(); err != nil {
+		log.Println("The configuration file was not found.\n")
+	}
+
+	// load config
+	cfg := config.LoadConfig()
+
+	// init security connection
+	dbConn := database.InitDB(cfg.DatabaseURL)
+
+	// security close pool connection
 	defer dbConn.Close()
 
-	// hay que implementar toda la validacion del main
 }

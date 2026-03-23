@@ -1,8 +1,10 @@
 package database
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 	"time"
 )
@@ -11,28 +13,48 @@ var db *sql.DB
 
 func InitDB(databaseURL string) *sql.DB {
 	var err error
-	db, err = sql.Open("postgres", databaseURL)
 
-	for i := 0; i < 3; i++ {
-		err = db.Ping()
+	// open pool connection
+	db, err = sql.Open("postgres", databaseURL)
+	if err != nil {
+		log.Fatalf("Error connecting to database: %v", err)
+	}
+
+	// config pool
+	db.SetMaxOpenConns(25) // count open connections
+	db.SetMaxIdleConns(25)
+	db.SetConnMaxLifetime(5 * time.Minute) // security
+
+	// security connections
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	for i := 1; i <= 3; i++ {
+		err = db.PingContext(ctx)
 		if err == nil {
-			break
+			fmt.Println("Connected to database")
+			return db
 		}
-		fmt.Printf("Re-attempting  connection")
+
+		fmt.Printf("Failed to connect to database (attempt #%d): %v", i, err)
 		time.Sleep(2 * time.Second)
 	}
 
-	if err != nil {
-		log.Fatal("The connection cloud not be established")
-	}
+	log.Fatalf("Failed to connect to database: %v", err)
+	return nil
 
-	fmt.Println("Successfully connected to the database")
+}
+
+func GetDB() *sql.DB {
 	return db
 }
 
-// close pool the connections
 func CloseDB() {
 	if db != nil {
-		fmt.Println("Closing the database successfully")
+		if err := db.Close(); err != nil {
+			fmt.Println("Error closing database")
+		} else {
+			fmt.Println("Pool Connection Closed")
+		}
 	}
 }
