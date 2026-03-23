@@ -14,7 +14,7 @@ func NewUserRepo(db *sql.DB) domain.UserRepo {
 	return &userRepo{DB: db}
 }
 
-func (r *userRepo) Create(ctx context.Context, user *domain.Users) error {
+func (r *userRepo) Create(ctx context.Context, user *domain.User) error {
 	query := `
 		INSERT INTO users(id, alias, name,surname, email,  phone, departament_id, role_id, is_active)	
 		VALUES(?,?,?,?,?,?,?,?,?)`
@@ -38,7 +38,7 @@ func (r *userRepo) Create(ctx context.Context, user *domain.Users) error {
 	return nil
 }
 
-func (r *userRepo) GetAll(ctx context.Context) ([]*domain.Users, error) {
+func (r *userRepo) GetAll(ctx context.Context) ([]*domain.User, error) {
 	query := `
 		SELECT
 	      id, alias, name,surname, email, phone, departament_id, role_id, is_active
@@ -49,10 +49,10 @@ func (r *userRepo) GetAll(ctx context.Context) ([]*domain.Users, error) {
 		return nil, err
 	}
 
-	users := make([]*domain.Users, 0)
+	users := make([]*domain.User, 0)
 
 	for rows.Next() {
-		user := &domain.Users{}
+		user := &domain.User{}
 		err := rows.Scan(
 			&user.ID,
 			&user.ALIAS,

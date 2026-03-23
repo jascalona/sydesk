@@ -20,6 +20,7 @@ type User struct {
 
 type UserValidation struct {
 	ID             string `json:id validate:"required,max=15"`
+	ALIAS          string `json:alias" validate:"required,max=100"`
 	NAME           string `json:validate:"required"`
 	SURNAME        string `json:surname:"required"`
 	EMAIL          string `json:email:"required,email"`
