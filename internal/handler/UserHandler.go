@@ -28,7 +28,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error_db": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"Solicitud procesada": reqUser})
+	c.JSON(http.StatusCreated, "Solicitud procesada")
 
 }
 

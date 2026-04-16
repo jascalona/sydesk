@@ -16,8 +16,8 @@ func NewUserRepo(db *sql.DB) domain.UserRepo {
 
 func (r *userRepo) Create(ctx context.Context, user *domain.User) error {
 	query := `
-		INSERT INTO users(id, alias, name,surname, email,  phone, departament_id, role_id, is_active)	
-		VALUES(?,?,?,?,?,?,?,?,?)`
+		INSERT INTO users(id, alias, name, surname, email, phone, departament_id, role_id, is_active)	
+		VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`
 
 	_, err := r.DB.ExecContext(
 		ctx,

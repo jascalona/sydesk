@@ -12,7 +12,7 @@ type User struct {
 	EMAIL          string `json:"email" db:"email"`
 	PHONE          string `json:"phone" db:"phone"`
 	PASSWORD_HASH  string `json:"password_hash" db:"password_hash"`
-	DEPARTAMENT_ID int    `json:"department_id" db:"department_id"`
+	DEPARTAMENT_ID int    `json:"departament_id" db:"departament_id"`
 	ROLE_ID        int    `json:"role_id" db:"role_id"`
 	IS_ACTIVE      bool   `json:"is_active" db:"is_active"`
 	CREATED_AT     string `json:"created_at" db:"created_at"`
@@ -25,7 +25,7 @@ type UserValidation struct {
 	SURNAME        string `json:surname:"required"`
 	EMAIL          string `json:email:"required,email"`
 	PHONE          string `json:phone:"required, min=11,max=11"`
-	DEPARTAMENT_ID int    `json:department_id:"required"`
+	DEPARTAMENT_ID int    `json:departament_id:"required"`
 	ROLE_ID        int    `json:role_id:"required"`
 	IS_ACTIVE      bool   `json:is_active:"required"`
 }
