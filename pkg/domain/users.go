@@ -2,6 +2,8 @@ package domain
 
 import (
 	"context"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type User struct {
@@ -30,7 +32,25 @@ type UserValidation struct {
 	IS_ACTIVE      bool   `json:is_active:"required"`
 }
 
+type UserLogin struct {
+	ID            string `json:"id"`
+	EMAIL         string `json:"email"`
+	PASSWORD_HASH string `json:"-"`
+}
+
+type CustomClaims struct {
+	UserId string `json:"user_id"`
+	Email  string `json:"email"`
+	jwt.RegisteredClaims
+}
+
 type UserRepo interface {
 	GetAll(ctx context.Context) ([]*User, error)
 	Create(ctx context.Context, users *User) error
+	GetByEmail(email string) (*User, error)
+}
+
+type AuthService interface {
+	Login(email, password string) (string, error)
+	ValidateToken(token string) (*CustomClaims, error)
 }
