@@ -102,15 +102,28 @@ func (s *UserAuth) ValidateToken(tokenStr string) (*domain.CustomClaims, error) 
 }
 
 func (s *UserServiceImpl) Create(ctx context.Context, user *domain.User) error {
+	// Invocamos la validacion del struct
 	if err := s.validate.StructCtx(ctx, user); err != nil {
 		log.Printf("Error al procesar la solicitud: %v", err)
 		return fmt.Errorf("El mensaje no cumple los parametros definidos: %w", err)
 	}
 
-	// Llamar al repositorio para guardar
+	// hasheo del password
+	length := 10
+	hash, errHash := bcrypt.GenerateFromPassword([]byte(user.PASSWORD_HASH), length)
+	if errHash != nil {
+		log.Printf("Error al hashear el password: %v", errHash)
+		return fmt.Errorf("Error interno", errHash)
+	}
+
+	// remplazo de del texto plano por el hash y asignacion de rol por defecto
+	user.PASSWORD_HASH = string(hash)
+	user.ROLE_ID = 6 // ROLE DEFAULT READ ONLY
+
+	// Persistencia de datos
 	err := s.Repo.Create(ctx, user)
 	if err != nil {
-		log.Printf("Error en repositorio: %v", err)
+		log.Printf("Error en el repositorio: %v", err)
 		return fmt.Errorf("no se pudo crear el registro")
 	}
 

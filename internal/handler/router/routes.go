@@ -26,8 +26,10 @@ func SetupRouter(r *gin.Engine, authService domain.AuthService, userH *handler.U
 		// --- GRUPO: USUARIOS ---
 		users := api.Group("/users")
 		{
-			users.POST("", userH.CreateUser)
+			//		users.POST("", userH.CreateUser)
 			users.GET("", userH.GetAllUsers)
+			users.POST("", userH.CreateUser)
+
 			// users.GET("/:id", userH.GetUserByID)
 		}
 

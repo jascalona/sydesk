@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"log"
 	"sydesk/pkg/domain"
 	"time"
 )
@@ -21,7 +22,7 @@ func (r *userRepo) GetByEmail(email string) (*domain.User, error) {
 	defer cancel()
 
 	query := `SELECT
-				id, email, password_hash,
+				id, email, password_hash
 		FROM users WHERE email = $1 LIMIT 1`
 
 	var user domain.User
@@ -31,6 +32,7 @@ func (r *userRepo) GetByEmail(email string) (*domain.User, error) {
 		&user.PASSWORD_HASH,
 	)
 	if err != nil {
+		log.Printf("Error en la funcion GetByEmail %v", err)
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, errors.New("Usuario no encontrado")
 		}
@@ -41,10 +43,11 @@ func (r *userRepo) GetByEmail(email string) (*domain.User, error) {
 
 }
 
+// --- REGISTRO DE USUARIO ---//
 func (r *userRepo) Create(ctx context.Context, user *domain.User) error {
 	query := `
-		INSERT INTO users(id, alias, name, surname, email, phone, departament_id, role_id, is_active)	
-		VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`
+		INSERT INTO users(id, alias, name, surname, email, phone, departament_id, password_hash, role_id, is_active)	
+		VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9, $10)`
 
 	_, err := r.DB.ExecContext(
 		ctx,
@@ -56,6 +59,7 @@ func (r *userRepo) Create(ctx context.Context, user *domain.User) error {
 		user.EMAIL,
 		user.PHONE,
 		user.DEPARTAMENT_ID,
+		user.PASSWORD_HASH,
 		user.ROLE_ID,
 		user.IS_ACTIVE,
 	)
