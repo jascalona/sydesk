@@ -8,17 +8,16 @@ import (
 )
 
 // SetupRouter es el administrador central de todos los endpoints de la API
-func SetupRouter(r *gin.Engine, authService domain.AuthService, userH *handler.UserHandler) {
+func SetupRouter(r *gin.Engine, authService domain.AuthServices, userH *handler.UserHandler) {
 
-	// 1. GESTIÓN DE ACCESO PÚBLICO
-	// Estos endpoints no requieren validación de identidad
+	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
 	authH := &handler.AuthHandler{Service: authService}
 
 	r.POST("/login", authH.Login)
 	r.GET("/health", func(c *gin.Context) { c.Status(200) })
 
-	// 2. GESTIÓN DE SERVICIOS PROTEGIDOS (API V1)
-	// Creamos el grupo principal y aplicamos el bloqueo global
+	// GESTION DE SERVICIOS PROTEGIDOS (API V1)
+	// Grupo principal y aplicacion del bloqueo global
 	api := r.Group("/api/v1")
 	api.Use(handler.Auth(authService))
 
@@ -26,11 +25,8 @@ func SetupRouter(r *gin.Engine, authService domain.AuthService, userH *handler.U
 		// --- GRUPO: USUARIOS ---
 		users := api.Group("/users")
 		{
-			//		users.POST("", userH.CreateUser)
 			users.GET("", userH.GetAllUsers)
 			users.POST("", userH.CreateUser)
-
-			// users.GET("/:id", userH.GetUserByID)
 		}
 
 		// --- GRUPO: TICKETS (Ejemplo de cómo expandir) ---

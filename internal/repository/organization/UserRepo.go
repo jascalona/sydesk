@@ -3,10 +3,7 @@ package organization
 import (
 	"context"
 	"database/sql"
-	"errors"
-	"log"
 	"sydesk/pkg/domain"
-	"time"
 )
 
 type userRepo struct {
@@ -15,32 +12,6 @@ type userRepo struct {
 
 func NewUserRepo(db *sql.DB) domain.UserRepo {
 	return &userRepo{DB: db}
-}
-
-func (r *userRepo) GetByEmail(email string) (*domain.User, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-
-	query := `SELECT
-				id, email, password_hash
-		FROM users WHERE email = $1 LIMIT 1`
-
-	var user domain.User
-	err := r.DB.QueryRowContext(ctx, query, email).Scan(
-		&user.ID,
-		&user.EMAIL,
-		&user.PASSWORD_HASH,
-	)
-	if err != nil {
-		log.Printf("Error en la funcion GetByEmail %v", err)
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, errors.New("Usuario no encontrado")
-		}
-		return nil, err
-	}
-	// retorno del objeto completo para reutilizar en la UX
-	return &user, nil
-
 }
 
 // --- REGISTRO DE USUARIO ---//

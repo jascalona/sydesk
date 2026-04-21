@@ -11,7 +11,7 @@ import (
 
 // AuthHandler define la estructura para los endpoints de autenticación
 type AuthHandler struct {
-	Service domain.AuthService
+	Service domain.AuthServices
 }
 
 // Login es el handler para el endpoint POST /login
@@ -43,7 +43,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 }
 
 // Auth es el Middleware que bloquea el acceso a rutas protegidas
-func Auth(authService domain.AuthService) gin.HandlerFunc {
+func Auth(authService domain.AuthServices) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
