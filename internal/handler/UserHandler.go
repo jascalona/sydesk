@@ -25,7 +25,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 
 	err := h.Service.Create(c.Request.Context(), &reqUser)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error_db": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 		return
 	}
 	c.JSON(http.StatusCreated, "Solicitud procesada")

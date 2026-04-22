@@ -11,6 +11,7 @@ import (
 func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 	userH *handler.UserHandler,
 	productH *handler.ProductHandler,
+	componentH *handler.ComponentsHandler,
 ) {
 
 	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
@@ -37,6 +38,13 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 		{
 			products.GET("", productH.GetAllProduct)
 			products.POST("", productH.CreatedProduct)
+		}
+
+		// GRUPO: COMPONENTS
+		components := api.Group("/components")
+		{
+			components.GET("", componentH.GetAllComponents)
+			components.POST("", componentH.CreatedComponents)
 		}
 
 		// --- GRUPO: TICKETS (Ejemplo de cómo expandir) ---

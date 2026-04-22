@@ -47,7 +47,7 @@ func (s *UserAuth) Login(email, password string) (string, error) {
 		UserId: user.ID,
 		Email:  email,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(1))), // hasta el momento el tiempo de expiracion es de  1h
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(5))), // hasta el momento el tiempo de expiracion es de  1h
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
 			Issuer:    "gin-web-demo",

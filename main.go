@@ -37,15 +37,24 @@ func main() {
 
 	// Grupo de repositorios bloqueados
 	userRepo := repOpg.NewUserRepo(dbConn)
+
+	// Grupo componentes
 	productRepo := repoCom.NewProductRepo(dbConn)
+	componentRepo := repoCom.NewComponentsRepo(dbConn)
 
 	// Grupo de Servicios
 	userService := servOrg.NewUserService(userRepo)
+
+	// Grupo de servicios componentes
 	productService := servComp.NewProductService(productRepo)
+	componentService := servComp.NewComponentService(componentRepo)
 
 	// grupo de servicios bloqueados
 	userHandler := handler.NewUserHandler(userService)
+
+	// grupo de componentes
 	productHandler := handler.NewProductHandler(productService)
+	componentHandler := handler.NewComponentsHandler(componentService)
 
 	// Servicio de Autenticación (Login/JWT)
 	// Obtenemos la llave secreta desde el .env
@@ -60,7 +69,13 @@ func main() {
 
 	// Llamamos al Administrador Central de Rutas
 	// Pasamos el router (r), el servicio de auth y los handlers de cada módulo
-	router.SetupRouter(r, authService, userHandler, productHandler)
+	router.SetupRouter(
+		r,
+		authService,
+		userHandler,
+		productHandler,
+		componentHandler,
+	)
 
 	// EJECUCION DEL SERVIDOR
 	port := ":8081"

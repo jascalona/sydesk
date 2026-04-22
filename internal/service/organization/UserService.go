@@ -32,7 +32,7 @@ func (s *UserServiceImpl) Create(ctx context.Context, user *domain.User) error {
 	// Invocamos la validacion del struct
 	if err := s.validate.StructCtx(ctx, user); err != nil {
 		log.Printf("Error al procesar la solicitud: %v", err)
-		return fmt.Errorf("El mensaje no cumple los parametros definidos: %w", err)
+		return fmt.Errorf("El mensaje no cumple los parametros definidos: %w")
 	}
 
 	// hasheo del password
@@ -50,7 +50,7 @@ func (s *UserServiceImpl) Create(ctx context.Context, user *domain.User) error {
 	// Persistencia de datos
 	err := s.Repo.Create(ctx, user)
 	if err != nil {
-		log.Printf("Error en el repositorio: %v", err)
+		log.Printf("Error al procesar la solicitud: %v", err)
 		return fmt.Errorf("no se pudo crear el registro")
 	}
 
