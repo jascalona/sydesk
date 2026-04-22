@@ -43,3 +43,19 @@ func (r *productRepo) GetAll(ctx context.Context) ([]*components.Product, error)
 	}
 	return products, nil
 }
+
+// --- REGISTRO DE PRODUCTOS ---//
+func (r *productRepo) Created(ctx context.Context, product *components.Product) error {
+	query := `INSERT INTO product (name, description, is_active)VALUES($1, $2, $3)`
+
+	_, err := r.DB.ExecContext(ctx, query,
+		product.NAME,
+		product.DESC,
+		product.IS_ACTIVE,
+	)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}

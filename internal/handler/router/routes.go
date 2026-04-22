@@ -8,7 +8,10 @@ import (
 )
 
 // SetupRouter es el administrador central de todos los endpoints de la API
-func SetupRouter(r *gin.Engine, authService domain.AuthServices, userH *handler.UserHandler) {
+func SetupRouter(r *gin.Engine, authService domain.AuthServices,
+	userH *handler.UserHandler,
+	productH *handler.ProductHandler,
+) {
 
 	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
 	authH := &handler.AuthHandler{Service: authService}
@@ -27,6 +30,13 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices, userH *handler.
 		{
 			users.GET("", userH.GetAllUsers)
 			users.POST("", userH.CreateUser)
+		}
+
+		// --- GRUPO: PRODUCTOS
+		products := api.Group("/products")
+		{
+			products.GET("", productH.GetAllProduct)
+			products.POST("", productH.CreatedProduct)
 		}
 
 		// --- GRUPO: TICKETS (Ejemplo de cómo expandir) ---

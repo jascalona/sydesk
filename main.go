@@ -15,6 +15,9 @@ import (
 	// Imports de repositorios y servicios
 	repOpg "sydesk/internal/repository/organization"
 	servOrg "sydesk/internal/service/organization"
+
+	repoCom "sydesk/internal/repository/components"
+	servComp "sydesk/internal/service/components"
 )
 
 func main() {
@@ -30,13 +33,19 @@ func main() {
 
 	// INYECCIÓN DE DEPENDENCIAS (CAPA DE DATOS -> SERVICIO -> HANDLER)
 
-	// Repositorio base (se comparte entre servicios)
-	userRepo := repOpg.NewUserRepo(dbConn)
 	authRepo := middlerware.NewAuthRepo(dbConn)
 
-	// Servicio de Usuarios (CRUD)
+	// Grupo de repositorios bloqueados
+	userRepo := repOpg.NewUserRepo(dbConn)
+	productRepo := repoCom.NewProductRepo(dbConn)
+
+	// Grupo de Servicios
 	userService := servOrg.NewUserService(userRepo)
+	productService := servComp.NewProductService(productRepo)
+
+	// grupo de servicios bloqueados
 	userHandler := handler.NewUserHandler(userService)
+	productHandler := handler.NewProductHandler(productService)
 
 	// Servicio de Autenticación (Login/JWT)
 	// Obtenemos la llave secreta desde el .env
@@ -51,7 +60,7 @@ func main() {
 
 	// Llamamos al Administrador Central de Rutas
 	// Pasamos el router (r), el servicio de auth y los handlers de cada módulo
-	router.SetupRouter(r, authService, userHandler)
+	router.SetupRouter(r, authService, userHandler, productHandler)
 
 	// EJECUCION DEL SERVIDOR
 	port := ":8081"

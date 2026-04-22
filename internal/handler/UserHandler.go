@@ -19,7 +19,7 @@ func NewUserHandler(s organization.UserService) *UserHandler {
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var reqUser domain.User
 	if err := c.ShouldBindJSON(&reqUser); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error en la deserializar el msj": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error al deserializar el mensaje": err.Error()})
 		return
 	}
 

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserAuth struct {
@@ -31,6 +32,13 @@ func (s *UserAuth) Login(email, password string) (string, error) {
 	if err != nil {
 		// error generico para vulnerabilidades
 		log.Printf("Error search user", err.Error())
+		return "", errors.New("Credenciales Invalidas")
+	}
+
+	// validacion del password_hash
+	err = bcrypt.CompareHashAndPassword([]byte(user.PASSWORD_HASH)[:], []byte(password))
+	if err != nil {
+		log.Printf("Credenciales invalidas", err.Error())
 		return "", errors.New("Credenciales Invalidas")
 	}
 
