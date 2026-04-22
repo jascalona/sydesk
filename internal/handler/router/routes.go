@@ -13,6 +13,7 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 	productH *handler.ProductHandler,
 	componentH *handler.ComponentsHandler,
 	subcomponetH *handler.SubcomponentHandler,
+	envirometH *handler.EnviromentHandler,
 ) {
 
 	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
@@ -46,13 +47,18 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 		{
 			components.GET("", componentH.GetAllComponents)
 			components.POST("", componentH.CreatedComponents)
-
 		}
 
 		// GRUPO: Subcomponentes
 		subcomponents := api.Group("/subcomponents")
 		{
 			subcomponents.GET("", subcomponetH.GetAll)
+		}
+
+		// GRUPO: Enviroment
+		enviroment := api.Group("/enviroment")
+		{
+			enviroment.GET("", envirometH.GetEnviroments)
 		}
 	}
 }

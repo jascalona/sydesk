@@ -42,6 +42,7 @@ func main() {
 	productRepo := repoCom.NewProductRepo(dbConn)
 	componentRepo := repoCom.NewComponentsRepo(dbConn)
 	subcomponentRepo := repoCom.NewSubcomponentRepo(dbConn)
+	enviromentRepo := repoCom.NewEnviromentRepo(dbConn)
 
 	// Grupo de Servicios
 	userService := servOrg.NewUserService(userRepo)
@@ -50,6 +51,7 @@ func main() {
 	productService := servComp.NewProductService(productRepo)
 	componentService := servComp.NewComponentService(componentRepo)
 	subcomponentService := servComp.NewSubcomponentService(subcomponentRepo)
+	enviromentService := servComp.NewEnviromentService(enviromentRepo)
 
 	// grupo de servicios bloqueados
 	userHandler := handler.NewUserHandler(userService)
@@ -58,6 +60,7 @@ func main() {
 	productHandler := handler.NewProductHandler(productService)
 	componentHandler := handler.NewComponentsHandler(componentService)
 	subcomponentHandler := handler.NewSubcomponentHandler(subcomponentService)
+	enviromentHandler := handler.NewEnviromentHandler(enviromentService)
 
 	// Servicio de Autenticación (Login/JWT)
 	// Obtenemos la llave secreta desde el .env
@@ -79,6 +82,7 @@ func main() {
 		productHandler,
 		componentHandler,
 		subcomponentHandler,
+		enviromentHandler,
 	)
 
 	// EJECUCION DEL SERVIDOR
