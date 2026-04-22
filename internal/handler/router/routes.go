@@ -14,6 +14,7 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 	componentH *handler.ComponentsHandler,
 	subcomponetH *handler.SubcomponentHandler,
 	envirometH *handler.EnviromentHandler,
+	statusH *handler.StatusHandler,
 ) {
 
 	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
@@ -59,6 +60,12 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 		enviroment := api.Group("/enviroment")
 		{
 			enviroment.GET("", envirometH.GetEnviroments)
+		}
+
+		// GRUPO: STATUS
+		status := api.Group("/status")
+		{
+			status.GET("", statusH.GetStatus)
 		}
 	}
 }
