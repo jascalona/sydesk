@@ -18,6 +18,9 @@ import (
 
 	repoCom "sydesk/internal/repository/components"
 	servComp "sydesk/internal/service/components"
+
+	repoBus "sydesk/internal/repository/business"
+	servBus "sydesk/internal/service/business"
 )
 
 func main() {
@@ -45,6 +48,9 @@ func main() {
 	enviromentRepo := repoCom.NewEnviromentRepo(dbConn)
 	statusRepo := repoCom.NewStatusRepo(dbConn)
 
+	// Grupo negocio
+	customerRepo := repoBus.NewCustomerRepo(dbConn)
+
 	// Grupo de Servicios
 	userService := servOrg.NewUserService(userRepo)
 
@@ -55,6 +61,8 @@ func main() {
 	enviromentService := servComp.NewEnviromentService(enviromentRepo)
 	statusService := servComp.NewStatusService(statusRepo)
 
+	customerService := servBus.NewCustomerServ(customerRepo)
+
 	// grupo de servicios bloqueados
 	userHandler := handler.NewUserHandler(userService)
 
@@ -64,6 +72,9 @@ func main() {
 	subcomponentHandler := handler.NewSubcomponentHandler(subcomponentService)
 	enviromentHandler := handler.NewEnviromentHandler(enviromentService)
 	statusHandler := handler.NewStatusHandler(statusService)
+
+	// grupo de negocio
+	customerHandler := handler.NewCustomerHandler(customerService)
 
 	// Servicio de Autenticación (Login/JWT)
 	// Obtenemos la llave secreta desde el .env
@@ -87,6 +98,7 @@ func main() {
 		subcomponentHandler,
 		enviromentHandler,
 		statusHandler,
+		customerHandler,
 	)
 
 	// EJECUCION DEL SERVIDOR
