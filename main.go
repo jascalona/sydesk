@@ -47,6 +47,7 @@ func main() {
 	subcomponentRepo := repoCom.NewSubcomponentRepo(dbConn)
 	enviromentRepo := repoCom.NewEnviromentRepo(dbConn)
 	statusRepo := repoCom.NewStatusRepo(dbConn)
+	customRole := repoCom.NewCustomRoleRepo(dbConn)
 
 	// Grupo negocio
 	customerRepo := repoBus.NewCustomerRepo(dbConn)
@@ -60,6 +61,7 @@ func main() {
 	subcomponentService := servComp.NewSubcomponentService(subcomponentRepo)
 	enviromentService := servComp.NewEnviromentService(enviromentRepo)
 	statusService := servComp.NewStatusService(statusRepo)
+	customRoleService := servComp.NewCustomRoleService(customRole)
 
 	customerService := servBus.NewCustomerServ(customerRepo)
 
@@ -72,6 +74,7 @@ func main() {
 	subcomponentHandler := handler.NewSubcomponentHandler(subcomponentService)
 	enviromentHandler := handler.NewEnviromentHandler(enviromentService)
 	statusHandler := handler.NewStatusHandler(statusService)
+	customRoleHandler := handler.NewCustomRoleHandler(customRoleService)
 
 	// grupo de negocio
 	customerHandler := handler.NewCustomerHandler(customerService)
@@ -99,6 +102,7 @@ func main() {
 		enviromentHandler,
 		statusHandler,
 		customerHandler,
+		customRoleHandler,
 	)
 
 	// EJECUCION DEL SERVIDOR
