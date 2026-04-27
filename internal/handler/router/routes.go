@@ -17,6 +17,7 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 	statusH *handler.StatusHandler,
 	customerH *handler.CustomerHandler,
 	customReoleH *handler.CustomRoleHandler,
+	customPRH *handler.CustomerProductRoleHandler,
 ) {
 
 	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
@@ -79,6 +80,11 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 		customRole := api.Group("/custom_roles")
 		{
 			customRole.GET("", customReoleH.GetAll)
+		}
+
+		customPR := api.Group("/customerpr")
+		{
+			customPR.GET("", customPRH.GetAllCustomPR)
 		}
 
 	}

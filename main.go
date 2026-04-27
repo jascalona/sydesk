@@ -48,6 +48,7 @@ func main() {
 	enviromentRepo := repoCom.NewEnviromentRepo(dbConn)
 	statusRepo := repoCom.NewStatusRepo(dbConn)
 	customRole := repoCom.NewCustomRoleRepo(dbConn)
+	customPR := repoCom.NewCustomProductRoleRepo(dbConn)
 
 	// Grupo negocio
 	customerRepo := repoBus.NewCustomerRepo(dbConn)
@@ -62,6 +63,7 @@ func main() {
 	enviromentService := servComp.NewEnviromentService(enviromentRepo)
 	statusService := servComp.NewStatusService(statusRepo)
 	customRoleService := servComp.NewCustomRoleService(customRole)
+	customPRService := servComp.NewCustomProductRoleService(customPR)
 
 	customerService := servBus.NewCustomerServ(customerRepo)
 
@@ -75,6 +77,7 @@ func main() {
 	enviromentHandler := handler.NewEnviromentHandler(enviromentService)
 	statusHandler := handler.NewStatusHandler(statusService)
 	customRoleHandler := handler.NewCustomRoleHandler(customRoleService)
+	customPRHandler := handler.NewCustomerProductRoleHandler(customPRService)
 
 	// grupo de negocio
 	customerHandler := handler.NewCustomerHandler(customerService)
@@ -103,6 +106,7 @@ func main() {
 		statusHandler,
 		customerHandler,
 		customRoleHandler,
+		customPRHandler,
 	)
 
 	// EJECUCION DEL SERVIDOR
