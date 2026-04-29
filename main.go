@@ -29,17 +29,18 @@ func main() {
 		log.Println("Archivo .env no encontrado, usando variables de sistema.")
 	}
 
-	// Cargar configuración e inicializar DB
+	// Cargar configuracion e inicializar DB
 	cfg := config.LoadConfig()
 	dbConn := database.InitDB(cfg.DatabaseURL)
 	defer dbConn.Close()
 
-	// INYECCIÓN DE DEPENDENCIAS (CAPA DE DATOS -> SERVICIO -> HANDLER)
+	// INYECCION DE DEPENDENCIAS (CAPA DE DATOS -> SERVICIO -> HANDLER)
 
 	authRepo := middlerware.NewAuthRepo(dbConn)
 
 	// Grupo de repositorios bloqueados
 	userRepo := repOpg.NewUserRepo(dbConn)
+	rolesRepo := repOpg.NewRoleRepo(dbConn)
 
 	// Grupo componentes
 	productRepo := repoCom.NewProductRepo(dbConn)
@@ -55,6 +56,7 @@ func main() {
 
 	// Grupo de Servicios
 	userService := servOrg.NewUserService(userRepo)
+	rolesService := servOrg.NewRoleService(rolesRepo)
 
 	// Grupo de servicios componentes
 	productService := servComp.NewProductService(productRepo)
@@ -69,6 +71,7 @@ func main() {
 
 	// grupo de servicios bloqueados
 	userHandler := handler.NewUserHandler(userService)
+	rolesHandler := handler.NewRolesHandler(rolesService)
 
 	// grupo de componentes
 	productHandler := handler.NewProductHandler(productService)
@@ -99,6 +102,7 @@ func main() {
 		r,
 		authService,
 		userHandler,
+		rolesHandler,
 		productHandler,
 		componentHandler,
 		subcomponentHandler,
