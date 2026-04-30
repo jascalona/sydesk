@@ -6,7 +6,6 @@ import (
 	"log"
 	"sydesk/pkg/domain"
 
-	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,24 +15,19 @@ type UserService interface {
 }
 
 type UserServiceImpl struct {
-	Repo     domain.UserRepo
-	validate *validator.Validate
+	Repo domain.UserRepo
 }
 
 // Instancia para servicios comunes
 func NewUserService(repo domain.UserRepo) UserService {
 	return &UserServiceImpl{
-		Repo:     repo,
-		validate: validator.New(),
+		Repo: repo,
 	}
 }
 
 func (s *UserServiceImpl) Create(ctx context.Context, user *domain.User) error {
-	// Invocamos la validacion del struct
-	if err := s.validate.StructCtx(ctx, user); err != nil {
-		log.Printf("Error al procesar la solicitud: %v", err)
-		return fmt.Errorf("El mensaje no cumple los parametros definidos: %w")
-	}
+
+	// validaciones de negocio si son requeridas mas adelantes
 
 	// hasheo del password
 	length := 10
@@ -51,9 +45,8 @@ func (s *UserServiceImpl) Create(ctx context.Context, user *domain.User) error {
 	err := s.Repo.Create(ctx, user)
 	if err != nil {
 		log.Printf("Error al procesar la solicitud: %v", err)
-		return fmt.Errorf("no se pudo crear el registro")
+		return fmt.Errorf("no se pudo crear el registro, por favor verifique la traza de la operacion")
 	}
-
 	return nil
 }
 

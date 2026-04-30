@@ -19,15 +19,15 @@ type User struct {
 }
 
 type UserValidation struct {
-	ID             string `json:id validate:"required,max=15"`
-	ALIAS          string `json:alias" validate:"required,max=100"`
-	NAME           string `json:validate:"required"`
-	SURNAME        string `json:surname:"required"`
-	EMAIL          string `json:email:"required,email"`
-	PHONE          string `json:phone:"required, min=11,max=11"`
-	DEPARTAMENT_ID int    `json:departament_id:"required"`
-	ROLE_ID        int    `json:role_id:"required"`
-	IS_ACTIVE      bool   `json:is_active:"required"`
+	ID             string `json:"id" binding:"required,max=15,min=6"`
+	ALIAS          string `json:"alias" binding:"required,max=100,min=2"`
+	NAME           string `json:"name" 	binding:"required,max=100,min=2"`
+	SURNAME        string `json:"surname" binding:"required,max=100,min=2"`
+	EMAIL          string `json:"email" binding:"required,email"`
+	PHONE          string `json:"phone" binding:"required,min=11,max=11"`
+	DEPARTAMENT_ID int    `json:"departament_id" binding:"required"`
+	ROLE_ID        int    `json:"role_id" binding:"required"`
+	IS_ACTIVE      bool   `json:"is_active" binding:"required"`
 }
 
 type UserRepo interface {
