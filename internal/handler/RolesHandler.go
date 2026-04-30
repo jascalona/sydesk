@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"sydesk/internal/service/organization"
 	"sydesk/pkg/domain"
+	"sydesk/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,17 +31,30 @@ func (h *RolesHandler) GetRoles(c *gin.Context) {
 }
 
 func (h *RolesHandler) CreateRole(c *gin.Context) {
-	var reqRole domain.Roles
+	// struct con el tags binding definido en la construccion del msj
+	var reqRole domain.ValidateRoles
+
+	// Al falla el bindeo por label o formato incorrecto
 	if err := c.ShouldBindJSON(&reqRole); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error al deserealizar el mensaje": err.Error()})
+		// Retorno de msj de errores globales
+		errors := utils.GetValidationError(err)
+
+		if errors != nil {
+			log.Printf("error en la validacion del mensaje", err.Error())
+			c.JSON(http.StatusConflict, gin.H{"error de formato": errors})
+			return
+		}
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": "JSON MAL FORMADO"})
 		return
 	}
 
-	err := h.Servcie.Created(c.Request.Context(), &reqRole)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"errir interno": err.Error()})
+	// caso de aprobacion
+	role := domain.Roles{NAME: reqRole.NAME}
+
+	if err := h.Servcie.Created(c.Request.Context(), &role); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusCreated, "Solicitud procesada")
 }

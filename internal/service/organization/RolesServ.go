@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"sydesk/pkg/domain"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type RolesServices interface {
@@ -15,14 +13,12 @@ type RolesServices interface {
 }
 
 type RolesServiceImpl struct {
-	Repo     domain.RolesRepo
-	validate *validator.Validate
+	Repo domain.RolesRepo
 }
 
 func NewRoleService(repo domain.RolesRepo) RolesServices {
 	return &RolesServiceImpl{
-		Repo:     repo,
-		validate: validator.New(),
+		Repo: repo,
 	}
 }
 
@@ -37,16 +33,14 @@ func (s *RolesServiceImpl) GetAll(ctx context.Context) ([]*domain.Roles, error) 
 }
 
 func (s *RolesServiceImpl) Created(ctx context.Context, rol *domain.Roles) error {
-	// Invocamos la validacion del struct
-	if err := s.validate.Struct(rol); err != nil {
-		log.Printf("Error al procesar la solicitud %v:", err.Error())
-		return fmt.Errorf("El mensaje no cumple con los parametros definidos: %v", err)
-	}
+	// validaciones de negocio despues podemos integrar estas reglas de negocio
 
+	// persistir en bd
 	err := s.Repo.Created(ctx, rol)
 	if err != nil {
-		log.Printf("no se puede crear el registro", err.Error())
-		return fmt.Errorf("No se pudo crear el registro, revisar los logs para mayor detalle")
+		log.Printf("error al procesar la solicitud", err.Error())
+		return fmt.Errorf("no se pudo crear el registro, por favor verifique la traza de la operacion")
 	}
 	return nil
+
 }

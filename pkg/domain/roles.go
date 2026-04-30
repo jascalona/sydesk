@@ -11,7 +11,7 @@ type Roles struct {
 }
 
 type ValidateRoles struct {
-	NAME string `json:name validate:"required,max=2"`
+	NAME string `json:"name" binding:"required,max=100,min=2"`
 }
 
 type RolesRepo interface {
