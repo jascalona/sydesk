@@ -18,10 +18,10 @@ type User struct {
 	CREATED_AT     string `json:"created_at" db:"created_at"`
 }
 
-type UserValidation struct {
+type ValidationUser struct {
 	ID             string `json:"id" binding:"required,max=15,min=6"`
 	ALIAS          string `json:"alias" binding:"required,max=100,min=2"`
-	NAME           string `json:"name" 	binding:"required,max=100,min=2"`
+	NAME           string `json:"name" binding:"required,max=100,min=2"`
 	SURNAME        string `json:"surname" binding:"required,max=100,min=2"`
 	EMAIL          string `json:"email" binding:"required,email"`
 	PHONE          string `json:"phone" binding:"required,min=11,max=11"`

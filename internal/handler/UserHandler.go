@@ -20,7 +20,7 @@ func NewUserHandler(s organization.UserService) *UserHandler {
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	// struct con el tags binding definido en la construccion del msj
-	var reqUser domain.ValidateRoles
+	var reqUser domain.ValidationUser
 
 	// al fallar el bindeo por label o formato incorrecto
 	if err := c.ShouldBindJSON(&reqUser); err != nil {
