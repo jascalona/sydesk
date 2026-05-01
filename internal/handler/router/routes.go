@@ -85,6 +85,13 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 			customer.GET("", customerH.GetCustomer)
 			customer.POST("", customerH.CreateCustomer)
 		}
+
+		// --- MODULO AUDITORIA ---//
+		audit := api.Group("/customer_audit")
+		{
+			audit.GET("", customerH.GetAuditCustomer)
+		}
+
 		customRole := api.Group("/custom_roles")
 		{
 			customRole.GET("", customReoleH.GetAll)

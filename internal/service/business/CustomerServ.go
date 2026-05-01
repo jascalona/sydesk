@@ -12,6 +12,7 @@ import (
 type CustomerServ interface {
 	GetAll(ctx context.Context) ([]*business.Customer, error)
 	Created(ctx context.Context, customer *business.Customer) error
+	GetAuditCustomer(ctx context.Context, customer_id int) ([]*business.Customer, error)
 }
 
 type customerServImpl struct {
@@ -33,7 +34,15 @@ func (s *customerServImpl) GetAll(ctx context.Context) ([]*business.Customer, er
 		return nil, fmt.Errorf("error al obtener los registros")
 	}
 	return custom, nil
+}
 
+func (s *customerServImpl) GetAuditCustomer(ctx context.Context, customer_id int) ([]*business.Customer, error) {
+	customers, err := s.Repo.GetAuditCustomer(ctx, customer_id)
+	if err != nil {
+		log.Printf("Error al obtener los registros: %v", err.Error())
+		return nil, fmt.Errorf("error al obtener los registros")
+	}
+	return customers, nil
 }
 
 func (s *customerServImpl) Created(ctx context.Context, customer *business.Customer) error {

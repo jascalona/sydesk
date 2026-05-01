@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"sydesk/internal/service/business"
 	domain "sydesk/pkg/domain/business"
 
@@ -24,6 +25,23 @@ func (h *CustomerHandler) GetCustomer(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 	}
 	c.JSON(http.StatusOK, customer)
+}
+
+// --- MODULO AUDITORIA ---//
+func (h *CustomerHandler) GetAuditCustomer(c *gin.Context) {
+	customerID, err := strconv.Atoi(c.DefaultQuery("customer_id", "0"))
+	if err != nil {
+		log.Printf("Error al convertir el customer_id: %v", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "customer_id invalido"})
+		return
+	}
+
+	customers, err := h.Service.GetAuditCustomer(c.Request.Context(), customerID)
+	if err != nil {
+		log.Printf("Error en el servicio %v:", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
+	}
+	c.JSON(http.StatusOK, customers)
 }
 
 func (h *CustomerHandler) CreateCustomer(c *gin.Context) {
