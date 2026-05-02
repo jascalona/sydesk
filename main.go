@@ -21,6 +21,9 @@ import (
 
 	repoBus "sydesk/internal/repository/business"
 	servBus "sydesk/internal/service/business"
+
+	repoAudit "sydesk/internal/repository/audit"
+	servAudit "sydesk/internal/service/audit"
 )
 
 func main() {
@@ -51,6 +54,9 @@ func main() {
 	customRole := repoCom.NewCustomRoleRepo(dbConn)
 	customPR := repoCom.NewCustomProductRoleRepo(dbConn)
 
+	// AUDITORIA
+	auditRepo := repoAudit.NewAuditRepo(dbConn)
+
 	// Grupo negocio
 	customerRepo := repoBus.NewCustomerRepo(dbConn)
 
@@ -68,6 +74,7 @@ func main() {
 	customPRService := servComp.NewCustomProductRoleService(customPR)
 
 	customerService := servBus.NewCustomerServ(customerRepo)
+	auditService := servAudit.NewAuditServ(auditRepo)
 
 	// grupo de servicios bloqueados
 	userHandler := handler.NewUserHandler(userService)
@@ -83,6 +90,7 @@ func main() {
 	customPRHandler := handler.NewCustomerProductRoleHandler(customPRService)
 
 	// grupo de negocio
+	auditHandler := handler.NewAuditHandler(auditService)
 	customerHandler := handler.NewCustomerHandler(customerService)
 
 	// Servicio de Autenticación (Login/JWT)
@@ -111,6 +119,7 @@ func main() {
 		customerHandler,
 		customRoleHandler,
 		customPRHandler,
+		auditHandler,
 	)
 
 	// EJECUCION DEL SERVIDOR
