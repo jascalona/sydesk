@@ -56,6 +56,7 @@ func main() {
 
 	// AUDITORIA
 	auditRepo := repoAudit.NewAuditRepo(dbConn)
+	asRepo := repoAudit.NewAsRepo(dbConn)
 
 	// Grupo negocio
 	customerRepo := repoBus.NewCustomerRepo(dbConn)
@@ -75,6 +76,7 @@ func main() {
 
 	customerService := servBus.NewCustomerServ(customerRepo)
 	auditService := servAudit.NewAuditServ(auditRepo)
+	asService := servAudit.NewAsServ(asRepo)
 
 	// grupo de servicios bloqueados
 	userHandler := handler.NewUserHandler(userService)
@@ -91,6 +93,7 @@ func main() {
 
 	// grupo de negocio
 	auditHandler := handler.NewAuditHandler(auditService)
+	asHandler := handler.NewAsHandler(asService)
 	customerHandler := handler.NewCustomerHandler(customerService)
 
 	// Servicio de Autenticación (Login/JWT)
@@ -120,6 +123,7 @@ func main() {
 		customRoleHandler,
 		customPRHandler,
 		auditHandler,
+		asHandler,
 	)
 
 	// EJECUCION DEL SERVIDOR

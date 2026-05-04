@@ -21,6 +21,7 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 	customReoleH *handler.CustomRoleHandler,
 	customPRH *handler.CustomerProductRoleHandler,
 	auditH *handler.AuditHandler,
+	asH *handler.AsHandler,
 ) {
 
 	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
@@ -91,6 +92,12 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 		audit_service := api.Group("/auditcustom")
 		{
 			audit_service.GET("", auditH.GetAudit)
+		}
+		// trazabilidad de la auditoria comercios
+		as := api.Group("/tradetraceability")
+		{
+			as.GET("", asH.AuditStatus)
+			as.POST("", asH.CreatedAS)
 		}
 
 		customRole := api.Group("/custom_roles")
