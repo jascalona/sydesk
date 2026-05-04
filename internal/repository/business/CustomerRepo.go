@@ -3,6 +3,7 @@ package business
 import (
 	"context"
 	"database/sql"
+	"log"
 	"sydesk/pkg/domain/business"
 )
 
@@ -44,13 +45,17 @@ func (r *customerRepo) GetAll(ctx context.Context) ([]*business.Customer, error)
 
 // --- REGISTRO DE CLIENTES --- //
 func (r *customerRepo) Created(ctx context.Context, customer *business.Customer) error {
-	query := `INSERT INTO customers(rif, name) VALUES ($1, $2)`
+	query := `INSERT INTO customers(rif, name, channel, ws_group, uid_sypago) VALUES ($1,$2,$3,$4,$5)`
 
 	_, err := r.DB.ExecContext(ctx, query,
 		customer.RIF,
 		customer.NAME,
+		customer.CHANNEL,
+		customer.WS_GROUP,
+		customer.UID_SYPAGO,
 	)
 	if err != nil {
+		log.Printf("error al correr el insert")
 		return err
 	}
 	return nil

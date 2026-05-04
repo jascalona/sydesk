@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"sydesk/pkg/domain/business"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type CustomerServ interface {
@@ -15,14 +13,12 @@ type CustomerServ interface {
 }
 
 type customerServImpl struct {
-	Repo     business.CustomerRepo
-	validate *validator.Validate
+	Repo business.CustomerRepo
 }
 
 func NewCustomerServ(repo business.CustomerRepo) CustomerServ {
 	return &customerServImpl{
-		Repo:     repo,
-		validate: validator.New(),
+		Repo: repo,
 	}
 }
 
@@ -36,19 +32,13 @@ func (s *customerServImpl) GetAll(ctx context.Context) ([]*business.Customer, er
 }
 
 func (s *customerServImpl) Created(ctx context.Context, customer *business.Customer) error {
-	// Validacion del struct
-	if err := s.validate.StructCtx(ctx, customer); err != nil {
-		log.Printf("Error al procesar la solicitud: %v", err)
-		return fmt.Errorf("Error al procesar la solicitud")
-	}
+	// Validaciones de negocio se son requeridas mas adelantes
 
 	// persistencia de datos
 	err := s.Repo.Created(ctx, customer)
 	if err != nil {
 		log.Printf("Error al crear la solicitud: %v", err)
-		return fmt.Errorf("no se pudo crear el registro")
+		return fmt.Errorf("no se pudo crear el registro, por favor verifique la traza de la operacion")
 	}
-
 	return nil
-
 }

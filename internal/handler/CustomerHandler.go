@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"sydesk/internal/service/business"
 	domain "sydesk/pkg/domain/business"
+	"sydesk/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,13 +28,37 @@ func (h *CustomerHandler) GetCustomer(c *gin.Context) {
 }
 
 func (h *CustomerHandler) CreateCustomer(c *gin.Context) {
-	var reqCustom domain.Customer
+	var reqCustom domain.ValidateCustomer
+
 	if err := c.ShouldBindJSON(&reqCustom); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error al deserealizar el mensaje": err.Error()})
+		errors := utils.GetValidationError(err)
+
+		if errors != nil {
+			log.Printf("error en la validacion del mensaje", err.Error())
+			c.JSON(http.StatusConflict, gin.H{"erroor de formato": errors})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": "json mal formado"})
 		return
 	}
 
-	err := h.Service.Created(c.Request.Context(), &reqCustom)
+	toNullable := func(v string) *string {
+		if v == "" {
+			return nil
+		}
+		return &v
+	}
+
+	// verificacion de campos
+	custom := domain.Customer{
+		RIF:        reqCustom.RIF,
+		NAME:       reqCustom.NAME,
+		CHANNEL:    toNullable(reqCustom.CHANNEL),
+		WS_GROUP:   toNullable(reqCustom.WS_GROUP),
+		UID_SYPAGO: toNullable(reqCustom.UID_SYPAGO),
+	}
+
+	err := h.Service.Created(c.Request.Context(), &custom)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 		return

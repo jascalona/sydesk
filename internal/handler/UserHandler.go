@@ -33,7 +33,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusBadRequest, gin.H{"error": "JSON MAL FORMADO"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "json mal formado"})
 		return
 	}
 
