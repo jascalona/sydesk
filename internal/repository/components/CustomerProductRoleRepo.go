@@ -15,14 +15,14 @@ func NewCustomProductRoleRepo(db *sql.DB) components.CustomerProductRoleRepo {
 	return &customerPRrepo{DB: db}
 }
 
-func (r *customerPRrepo) GetAll(ctx context.Context) ([]*components.CustomerProductRole, error) {
+func (r *customerPRrepo) GetAll(ctx context.Context, role_id int) ([]*components.CustomerProductRole, error) {
 
-	query := `SELECT id, customer_id, product_id, role_id, parent_id, created_at FROM customer_product_roles`
+	query := `SELECT id, customer_id, product_id, role_id, parent_id, created_at FROM customer_product_roles WHERE role_id = $1`
 
-	rows, err := r.DB.QueryContext(ctx, query)
+	rows, err := r.DB.QueryContext(ctx, query, role_id)
 
 	if err != nil {
-		log.Printf("error al correr el query context", err.Error())
+		log.Printf("error al correr el query context", err)
 		return nil, err
 	}
 

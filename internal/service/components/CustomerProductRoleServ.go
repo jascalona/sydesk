@@ -8,7 +8,7 @@ import (
 )
 
 type CustomProductRoleService interface {
-	GetAll(ctx context.Context) ([]*components.CustomerProductRole, error)
+	GetAll(ctx context.Context, role_id int) ([]*components.CustomerProductRole, error)
 	Created(ctx context.Context, cpr *components.CustomerProductRole) error
 }
 
@@ -22,14 +22,20 @@ func NewCustomProductRoleService(repo components.CustomerProductRoleRepo) Custom
 	}
 }
 
-func (s *CustomerProductRoleImpl) GetAll(ctx context.Context) ([]*components.CustomerProductRole, error) {
-	customPR, err := s.Repo.GetAll(ctx)
-	if err != nil {
-		log.Printf("Error al obtener los registros: %v", err.Error())
-		return nil, fmt.Errorf("error al obtener los registros")
-	}
+func (s *CustomerProductRoleImpl) GetAll(ctx context.Context, role_id int) ([]*components.CustomerProductRole, error) {
 
-	return customPR, nil
+	if role_id != 0 {
+		customPR, err := s.Repo.GetAll(ctx, role_id)
+		if err != nil {
+			log.Printf("Error al obtener los registros: %v", err.Error())
+			return nil, fmt.Errorf("error al obtener los registros")
+		}
+
+		return customPR, nil
+	}
+	log.Printf("el role_id no puede quedar vacio")
+	return nil, fmt.Errorf("el role_id no puede quedar vacio")
+
 }
 
 func (s *CustomerProductRoleImpl) Created(ctx context.Context, cpr *components.CustomerProductRole) error {

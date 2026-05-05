@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"strconv"
 	services "sydesk/internal/service/components"
 	validation "sydesk/pkg/domain/components"
 	"sydesk/pkg/utils"
@@ -19,7 +20,23 @@ func NewCustomerProductRoleHandler(s services.CustomProductRoleService) *Custome
 }
 
 func (h *CustomerProductRoleHandler) GetAllCustomPR(c *gin.Context) {
-	customPR, err := h.Services.GetAll(c.Request.Context())
+
+	roleIDParam := c.Query("role_id")
+
+	roleID, err := strconv.Atoi(roleIDParam)
+	if err != nil {
+		log.Printf("error %v", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "El ID del rol debe ser un número entero válido"})
+		return
+	}
+
+	if roleID <= 0 {
+		log.Printf("error %v", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "El ID del rol debe ser mayor a cero"})
+		return
+	}
+
+	customPR, err := h.Services.GetAll(c.Request.Context(), roleID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 		return

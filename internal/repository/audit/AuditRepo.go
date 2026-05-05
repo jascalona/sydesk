@@ -17,7 +17,7 @@ func NewAuditRepo(db *sql.DB) audit.AuditCustomer {
 	return &auditRepo{DB: db}
 }
 
-func (r *auditRepo) GetAuditCustomer(ctx context.Context, parentID uuid.UUID, customerID int) ([]*audit.Audit, error) {
+func (r *auditRepo) GetAuditCustomer(ctx context.Context, parentID uuid.UUID) ([]*audit.Audit, error) {
 
 	query := `
 	   SELECT 
@@ -45,12 +45,12 @@ func (r *auditRepo) GetAuditCustomer(ctx context.Context, parentID uuid.UUID, cu
 		INNER JOIN customer_product_roles prod_padre ON cpr.parent_id = prod_padre.id
 		INNER JOIN customers ibp ON prod_padre.customer_id = ibp.id
 		WHERE cpr.parent_id = $1
-		  AND ($2::int = 0 OR cli.id = $2)
-		  AND cli.id != ibp.id
-		  AND ibp.name ILIKE '%Bancaribe%';
+		 -- AND ($2::int = 0 OR cli.id = $2)
+		 -- AND cli.id != ibp.id
+		 -- AND ibp.name ILIKE '%Bancaribe%';
 	`
 
-	rows, err := r.DB.QueryContext(ctx, query, parentID, customerID)
+	rows, err := r.DB.QueryContext(ctx, query, parentID)
 	if err != nil {
 		log.Printf("Error al correr el query context %v", err.Error())
 		return nil, err

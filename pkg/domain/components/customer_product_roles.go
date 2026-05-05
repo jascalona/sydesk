@@ -56,6 +56,6 @@ type ValidationCustomerProductRole struct {
 }
 
 type CustomerProductRoleRepo interface {
-	GetAll(ctx context.Context) ([]*CustomerProductRole, error)
+	GetAll(ctx context.Context, role_id int) ([]*CustomerProductRole, error)
 	Created(ctx context.Context, cpr *CustomerProductRole) error
 }
