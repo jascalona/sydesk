@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"log"
 	"sydesk/pkg/domain/audit"
+
+	"github.com/google/uuid"
 )
 
 type AsService interface {
-	GetAll(ctx context.Context) ([]*audit.AuditServ, error)
+	GetAll(ctx context.Context, cpr_id uuid.UUID) ([]*audit.AuditServ, error)
 	Created(ctx context.Context, auditStatus *audit.AuditServ) error
 }
 
@@ -22,8 +24,9 @@ func NewAsServ(repo audit.AuditServInterface) AsService {
 	}
 }
 
-func (s *AsServiceImpl) GetAll(ctx context.Context) ([]*audit.AuditServ, error) {
-	audit_status, err := s.Repo.GetAll(ctx)
+func (s *AsServiceImpl) GetAll(ctx context.Context, cpr_id uuid.UUID) ([]*audit.AuditServ, error) {
+
+	audit_status, err := s.Repo.GetAll(ctx, cpr_id)
 	if err != nil {
 		log.Printf("Error al obtener los registros: %v", err.Error())
 		return nil, fmt.Errorf("error al obtener los registros")

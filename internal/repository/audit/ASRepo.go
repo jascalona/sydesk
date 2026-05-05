@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"log"
 	"sydesk/pkg/domain/audit"
+
+	"github.com/google/uuid"
 )
 
 type asRepo struct {
@@ -17,7 +19,7 @@ func NewAsRepo(db *sql.DB) audit.AuditServInterface {
 	return &asRepo{DB: db}
 }
 
-func (r *asRepo) GetAll(ctx context.Context) ([]*audit.AuditServ, error) {
+func (r *asRepo) GetAll(ctx context.Context, cpr_id uuid.UUID) ([]*audit.AuditServ, error) {
 
 	query := `
 		SELECT 
@@ -30,9 +32,9 @@ func (r *asRepo) GetAll(ctx context.Context) ([]*audit.AuditServ, error) {
 			end_at,
 			last_operation,
 			created_at
-		FROM audit_status ORDER BY created_at DESC`
+		FROM audit_status WHERE cpr_id = $1 ORDER BY created_at DESC`
 
-	rows, err := r.DB.QueryContext(ctx, query)
+	rows, err := r.DB.QueryContext(ctx, query, cpr_id)
 
 	if err != nil {
 		log.Printf("error al correr el query context %v", err.Error())

@@ -8,6 +8,7 @@ import (
 	"sydesk/pkg/utils"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type AsHandler struct {
@@ -19,7 +20,19 @@ func NewAsHandler(s audit.AsService) *AsHandler {
 }
 
 func (h *AsHandler) AuditStatus(c *gin.Context) {
-	as, err := h.Service.GetAll(c.Request.Context())
+
+	parentStr := c.Query("cpr_id")
+	if parentStr == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "cpr_id es obligatorio"})
+		return
+	}
+	cprID, err := uuid.Parse(parentStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "parent_id debe ser un UUID válido"})
+		return
+	}
+
+	as, err := h.Service.GetAll(c.Request.Context(), cprID)
 	if err != nil {
 		log.Printf("error interno: %v", err)
 		c.JSON(http.StatusInternalServerError, err)

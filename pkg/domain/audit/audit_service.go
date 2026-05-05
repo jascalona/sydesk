@@ -31,6 +31,6 @@ type ValidateAS struct {
 }
 
 type AuditServInterface interface {
-	GetAll(ctx context.Context) ([]*AuditServ, error)
+	GetAll(ctx context.Context, cpr_id uuid.UUID) ([]*AuditServ, error)
 	Created(ctx context.Context, audit *AuditServ) error
 }
