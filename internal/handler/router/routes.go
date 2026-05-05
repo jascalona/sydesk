@@ -100,7 +100,9 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 			as.POST("", asH.CreatedAS)
 		}
 
-		customRole := api.Group("/custom_roles")
+		// GRUPO ROLES CUSTOMERS & CPR
+
+		customRole := api.Group("/customroles")
 		{
 			customRole.GET("", customReoleH.GetAll)
 		}
@@ -108,6 +110,7 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 		customPR := api.Group("/customerpr")
 		{
 			customPR.GET("", customPRH.GetAllCustomPR)
+			customPR.POST("", customPRH.CreatedCPR)
 		}
 
 	}

@@ -3,6 +3,7 @@ package components
 import (
 	"context"
 	"database/sql"
+	"log"
 	"sydesk/pkg/domain/components"
 )
 
@@ -16,11 +17,12 @@ func NewCustomProductRoleRepo(db *sql.DB) components.CustomerProductRoleRepo {
 
 func (r *customerPRrepo) GetAll(ctx context.Context) ([]*components.CustomerProductRole, error) {
 
-	query := `SELECT id, customer_id, product_id, role_id, created_at FROM customer_product_roles`
+	query := `SELECT id, customer_id, product_id, role_id, parent_id, created_at FROM customer_product_roles`
 
 	rows, err := r.DB.QueryContext(ctx, query)
 
 	if err != nil {
+		log.Printf("error al correr el query context", err.Error())
 		return nil, err
 	}
 
@@ -33,6 +35,7 @@ func (r *customerPRrepo) GetAll(ctx context.Context) ([]*components.CustomerProd
 			&cpr.CUSTOMER_ID,
 			&cpr.PRODUCT_ID,
 			&cpr.ROLE_ID,
+			&cpr.PARENT_ID,
 			&cpr.CREATEDAT,
 		)
 		if err != nil {
@@ -45,4 +48,26 @@ func (r *customerPRrepo) GetAll(ctx context.Context) ([]*components.CustomerProd
 	}
 	return customProductRole, nil
 
+}
+
+func (r *customerPRrepo) Created(ctx context.Context, cpr *components.CustomerProductRole) error {
+
+	query := `
+		INSERT INTO customer_product_roles (
+			customer_id,
+			product_id,
+			role_id,
+			parent_id)VALUES($1,$2,$3,$4)`
+
+	_, err := r.DB.ExecContext(ctx, query,
+		cpr.CUSTOMER_ID,
+		cpr.PRODUCT_ID,
+		cpr.ROLE_ID,
+		cpr.PARENT_ID,
+	)
+	if err != nil {
+		log.Printf("error al corrrer el insert")
+		return err
+	}
+	return nil
 }

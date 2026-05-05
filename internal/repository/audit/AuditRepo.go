@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"log"
 	"sydesk/pkg/domain/audit"
+
+	"github.com/google/uuid"
 )
 
 type auditRepo struct {
@@ -15,7 +17,7 @@ func NewAuditRepo(db *sql.DB) audit.AuditCustomer {
 	return &auditRepo{DB: db}
 }
 
-func (r *auditRepo) GetAuditCustomer(ctx context.Context, customer_id int) ([]*audit.Audit, error) {
+func (r *auditRepo) GetAuditCustomer(ctx context.Context, parentID uuid.UUID, customerID int) ([]*audit.Audit, error) {
 
 	query := `
 	   SELECT 
@@ -39,15 +41,16 @@ func (r *auditRepo) GetAuditCustomer(ctx context.Context, customer_id int) ([]*a
 			
 		FROM customer_product_roles cpr 
 		INNER JOIN customers cli ON cpr.customer_id = cli.id
-		INNER JOIN contact cont ON cont.customer_id = cli.id
+		LEFT JOIN contact cont ON cont.customer_id = cli.id
 		INNER JOIN customer_product_roles prod_padre ON cpr.parent_id = prod_padre.id
 		INNER JOIN customers ibp ON prod_padre.customer_id = ibp.id
-		WHERE cli.id != ibp.id
-			AND ($1 = 0 OR cli.id = $1)
-		ORDER BY cli.created_at DESC
+		WHERE cpr.parent_id = $1
+		  AND ($2::int = 0 OR cli.id = $2)
+		  AND cli.id != ibp.id
+		  AND ibp.name ILIKE '%Bancaribe%';
 	`
 
-	rows, err := r.DB.QueryContext(ctx, query, customer_id)
+	rows, err := r.DB.QueryContext(ctx, query, parentID, customerID)
 	if err != nil {
 		log.Printf("Error al correr el query context %v", err.Error())
 		return nil, err

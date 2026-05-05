@@ -16,10 +16,11 @@ func NewCustomerRepo(db *sql.DB) business.CustomerRepo {
 }
 
 func (r *customerRepo) GetAll(ctx context.Context) ([]*business.Customer, error) {
-	query := `SELECT id, rif, name, created_at FROM customers ORDER BY created_at DESC`
+	query := `SELECT id, rif, name, channel, ws_group, uid_sypago, created_at FROM customers ORDER BY created_at DESC`
 
 	rows, err := r.DB.QueryContext(ctx, query)
 	if err != nil {
+		log.Printf("error al correr el query context")
 		return nil, err
 	}
 
@@ -30,6 +31,9 @@ func (r *customerRepo) GetAll(ctx context.Context) ([]*business.Customer, error)
 			&customRow.ID,
 			&customRow.RIF,
 			&customRow.NAME,
+			&customRow.CHANNEL,
+			&customRow.WS_GROUP,
+			&customRow.UID_SYPAGO,
 			&customRow.CREATEDAT,
 		)
 		if err != nil {

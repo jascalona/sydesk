@@ -5,23 +5,20 @@ import (
 	"fmt"
 	"log"
 	"sydesk/pkg/domain/components"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type CustomProductRoleService interface {
 	GetAll(ctx context.Context) ([]*components.CustomerProductRole, error)
+	Created(ctx context.Context, cpr *components.CustomerProductRole) error
 }
 
 type CustomerProductRoleImpl struct {
-	Repo     components.CustomerProductRoleRepo
-	validate *validator.Validate
+	Repo components.CustomerProductRoleRepo
 }
 
 func NewCustomProductRoleService(repo components.CustomerProductRoleRepo) CustomProductRoleService {
 	return &CustomerProductRoleImpl{
-		Repo:     repo,
-		validate: validator.New(),
+		Repo: repo,
 	}
 }
 
@@ -33,4 +30,15 @@ func (s *CustomerProductRoleImpl) GetAll(ctx context.Context) ([]*components.Cus
 	}
 
 	return customPR, nil
+}
+
+func (s *CustomerProductRoleImpl) Created(ctx context.Context, cpr *components.CustomerProductRole) error {
+
+	// persistencia en bd
+	err := s.Repo.Created(ctx, cpr)
+	if err != nil {
+		log.Printf("error al crear la solicitud: %v", err.Error())
+		return fmt.Errorf("no se pudo crear el registro, por favor verifique la traza de la operacion")
+	}
+	return nil
 }

@@ -35,7 +35,7 @@ func (h *CustomerHandler) CreateCustomer(c *gin.Context) {
 
 		if errors != nil {
 			log.Printf("error en la validacion del mensaje", err.Error())
-			c.JSON(http.StatusConflict, gin.H{"erroor de formato": errors})
+			c.JSON(http.StatusConflict, gin.H{"error de formato": errors})
 			return
 		}
 		c.JSON(http.StatusBadRequest, gin.H{"error": "json mal formado"})

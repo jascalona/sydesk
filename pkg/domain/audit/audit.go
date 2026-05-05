@@ -24,5 +24,5 @@ type Audit struct {
 }
 
 type AuditCustomer interface {
-	GetAuditCustomer(ctx context.Context, customer_id int) ([]*Audit, error)
+	GetAuditCustomer(ctx context.Context, parentID uuid.UUID, customerID int) ([]*Audit, error)
 }
