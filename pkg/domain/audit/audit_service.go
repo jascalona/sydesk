@@ -7,7 +7,7 @@ import (
 )
 
 type AuditServ struct {
-	ID             uuid.UUID `json:"id" db:"id"`
+	ID             int       `json:"id" db:"id"`
 	CPR_ID         uuid.UUID `json:"cpr_id" db:"cpr_id"`
 	START_AT       *string   `json:"start_at" db:"start_at"`
 	ENVIRONMENT    string    `json:"environment" db:"environment"`
@@ -33,4 +33,5 @@ type ValidateAS struct {
 type AuditServInterface interface {
 	GetAll(ctx context.Context, cpr_id uuid.UUID) ([]*AuditServ, error)
 	Created(ctx context.Context, audit *AuditServ) error
+	// UpdateAS(ctx context.Context)
 }

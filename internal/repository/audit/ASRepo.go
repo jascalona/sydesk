@@ -29,6 +29,7 @@ func (r *asRepo) GetAll(ctx context.Context, cpr_id uuid.UUID) ([]*audit.AuditSe
 			environment,
 			services,
 			description,
+			activities,
 			end_at,
 			last_operation,
 			created_at
@@ -56,6 +57,7 @@ func (r *asRepo) GetAll(ctx context.Context, cpr_id uuid.UUID) ([]*audit.AuditSe
 			&asRows.ENVIRONMENT,
 			&servicesRaw,
 			&asRows.DESCRIPTION,
+			&asRows.ACTIVITIES,
 			&asRows.END_AT,
 			&asRows.LAST_OPERATION,
 			&asRows.CREATED_AT,
