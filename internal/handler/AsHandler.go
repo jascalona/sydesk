@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"sydesk/internal/service/audit"
 	validation "sydesk/pkg/domain/audit"
 	"sydesk/pkg/utils"
@@ -82,4 +83,34 @@ func (h *AsHandler) CreatedAS(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, "Solicitud Procesada")
+}
+
+func (h *AsHandler) Update(c *gin.Context) {
+	idQuery := c.Query("id")
+	id, err := strconv.ParseInt(idQuery, 10, 64)
+
+	if err != nil {
+		log.Printf("error al deserealizar el mensaje", err)
+		c.JSON(http.StatusBadRequest, gin.H{"json mal formado": err})
+		return
+	}
+
+	var input validation.ValidateAS
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		errors := utils.GetValidationError(err)
+
+		if errors != nil {
+			log.Printf("error en la validacion del mensaje: %v", err)
+			c.JSON(http.StatusConflict, gin.H{"error de formato": errors})
+			return
+		}
+	}
+
+	// llamada al servicio
+	if err := h.Service.UpdateAS(c.Request.Context(), id, input); err != nil {
+		log.Printf("Error al actualizar: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo actualizar el registro"})
+		return
+	}
 }

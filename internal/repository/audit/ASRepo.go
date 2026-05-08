@@ -123,3 +123,67 @@ func (r *asRepo) Created(ctx context.Context, audit *audit.AuditServ) error {
 	return nil
 
 }
+
+// filtro de registro
+func (r *asRepo) GetByID(ctx context.Context, id int64) (*audit.AuditServ, error) {
+	query := `
+		SELECT 
+			id, 
+			cpr_id, 
+			start_at, 
+			environment,
+			services,
+			description,
+			activities,
+			end_at,
+			last_operation,
+			created_at	
+		FROM audit_status WHERE id = $1
+	`
+	rows := r.DB.QueryRowContext(ctx, query, id)
+
+	var t audit.AuditServ
+	if err := rows.Scan(
+		&t.ID,
+		&t.CPR_ID,
+		&t.START_AT,
+		&t.ENVIRONMENT,
+		&t.SERVICES,
+		&t.DESCRIPTION,
+		&t.ACTIVITIES,
+		&t.END_AT,
+		&t.LAST_OPERATION,
+	); err != nil {
+		log.Printf("Error en el query")
+		return nil, err
+	}
+	return &t, nil
+}
+
+func (r *asRepo) UpdateAS(ctx context.Context, audit *audit.AuditServ) error {
+	query := `
+		UPDATE audit_status
+		SET start_at = $1,
+			environment = $2, 
+            services = $3, 
+            description = $4, 
+            activities = $5, 
+            end_at = $6, 
+            last_operation = $7
+        WHERE id = $8`
+
+	_, err := r.DB.ExecContext(ctx, query,
+		audit.START_AT,
+		audit.ENVIRONMENT,
+		audit.SERVICES,
+		audit.DESCRIPTION,
+		audit.ACTIVITIES,
+		audit.END_AT,
+		audit.LAST_OPERATION,
+	)
+	if err != nil {
+		log.Printf("error al correr el update %v", err.Error())
+		return err
+	}
+	return nil
+}

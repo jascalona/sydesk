@@ -33,5 +33,8 @@ type ValidateAS struct {
 type AuditServInterface interface {
 	GetAll(ctx context.Context, cpr_id uuid.UUID) ([]*AuditServ, error)
 	Created(ctx context.Context, audit *AuditServ) error
-	// UpdateAS(ctx context.Context)
+
+	// filtro de registro
+	GetByID(ctx context.Context, id int64) (*AuditServ, error)
+	UpdateAS(ctx context.Context, audit *AuditServ) error
 }

@@ -98,6 +98,7 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 		{
 			as.GET("", asH.AuditStatus)
 			as.POST("", asH.CreatedAS)
+			as.PATCH("", asH.Update)
 		}
 
 		// GRUPO ROLES CUSTOMERS & CPR
@@ -112,6 +113,5 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 			customPR.GET("", customPRH.GetAllCustomPR)
 			customPR.POST("", customPRH.CreatedCPR)
 		}
-
 	}
 }
