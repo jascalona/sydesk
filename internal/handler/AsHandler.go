@@ -90,7 +90,7 @@ func (h *AsHandler) Update(c *gin.Context) {
 	id, err := strconv.ParseInt(idQuery, 10, 64)
 
 	if err != nil {
-		log.Printf("error al deserealizar el mensaje", err)
+		log.Printf("error al deserealizar el mensaje: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{"json mal formado": err})
 		return
 	}
@@ -113,4 +113,5 @@ func (h *AsHandler) Update(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "No se pudo actualizar el registro"})
 		return
 	}
+	c.JSON(http.StatusAccepted, "Registro actualizado")
 }

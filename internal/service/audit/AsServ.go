@@ -58,6 +58,7 @@ func (s *AsServiceImpl) UpdateAS(ctx context.Context, id int64, input audit.Vali
 	// REGLAS DE NEGOCIO (VERIFICACION DE QUE END_AT SEA MAYOR A START_AT)
 
 	// CONVERSION DE LOS DATOS PARSEADOS EN EL JSON PARA LA BD
+	existingAudit.CPR_ID = input.CPR_ID
 	existingAudit.START_AT = &input.START_AT
 	existingAudit.ENVIRONMENT = input.ENVIRONMENT
 	existingAudit.SERVICES = &input.SERVICES
