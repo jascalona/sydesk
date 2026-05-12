@@ -22,6 +22,8 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 	customPRH *handler.CustomerProductRoleHandler,
 	auditH *handler.AuditHandler,
 	asH *handler.AsHandler,
+	channelH *handler.ChannelHandler,
+	SupH *handler.SupHandler,
 ) {
 
 	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
@@ -113,5 +115,17 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 			customPR.GET("", customPRH.GetAllCustomPR)
 			customPR.POST("", customPRH.CreatedCPR)
 		}
+
+		// GRUPO DE COMPLEMENTOS PARA EL MODULO DE AUDITORIA
+		channel := api.Group("/channel")
+		{
+			channel.GET("", channelH.GetChannel)
+		}
+
+		subproduct := api.Group("/subproduct")
+		{
+			subproduct.GET("/", SupH.GetSup)
+		}
+
 	}
 }

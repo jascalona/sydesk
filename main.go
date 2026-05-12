@@ -57,6 +57,8 @@ func main() {
 	// AUDITORIA
 	auditRepo := repoAudit.NewAuditRepo(dbConn)
 	asRepo := repoAudit.NewAsRepo(dbConn)
+	channelRepo := repoAudit.NewChannelRepo(dbConn)
+	supRepo := repoAudit.NewSupRepo(dbConn)
 
 	// Grupo negocio
 	customerRepo := repoBus.NewCustomerRepo(dbConn)
@@ -77,6 +79,8 @@ func main() {
 	customerService := servBus.NewCustomerServ(customerRepo)
 	auditService := servAudit.NewAuditServ(auditRepo)
 	asService := servAudit.NewAsServ(asRepo)
+	channelService := servAudit.NewChannelServ(channelRepo)
+	supService := servAudit.NewSupService(supRepo)
 
 	// grupo de servicios bloqueados
 	userHandler := handler.NewUserHandler(userService)
@@ -95,6 +99,8 @@ func main() {
 	auditHandler := handler.NewAuditHandler(auditService)
 	asHandler := handler.NewAsHandler(asService)
 	customerHandler := handler.NewCustomerHandler(customerService)
+	channelHandler := handler.NewChannelHandler(channelService)
+	supHandler := handler.NewSupHandler(supService)
 
 	// Servicio de Autenticación (Login/JWT)
 	// Obtenemos la llave secreta desde el .env
@@ -124,6 +130,8 @@ func main() {
 		customPRHandler,
 		auditHandler,
 		asHandler,
+		channelHandler,
+		supHandler,
 	)
 
 	// EJECUCION DEL SERVIDOR
