@@ -31,7 +31,7 @@ func (h *CustomerProductRoleHandler) GetAllCustomPR(c *gin.Context) {
 	}
 
 	if roleID <= 0 {
-		log.Printf("error %v", err.Error())
+		log.Println("error", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "El ID del rol debe ser mayor a cero"})
 		return
 	}

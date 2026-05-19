@@ -22,7 +22,7 @@ func (h *RolesHandler) GetRoles(c *gin.Context) {
 
 	roles, err := h.Servcie.GetAll(c.Request.Context())
 	if err != nil {
-		log.Printf("erro en el servicio", err.Error())
+		log.Printf("erro en el servicio %v", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 		return
 	}
@@ -40,7 +40,7 @@ func (h *RolesHandler) CreateRole(c *gin.Context) {
 		errors := utils.GetValidationError(err)
 
 		if errors != nil {
-			log.Printf("error en la validacion del mensaje", err.Error())
+			log.Println("error en la validacion del mensaje", err.Error())
 			c.JSON(http.StatusConflict, gin.H{"error de formato": errors})
 			return
 		}

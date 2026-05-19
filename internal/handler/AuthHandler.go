@@ -23,7 +23,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	// Validar formato del JSON de entrada
 	if err := c.ShouldBindJSON(&input); err != nil {
-		log.Printf("error: ", err.Error())
+		log.Println("error: ", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "El mensaje no pudo ser deserializado"})
 		return
 	}
@@ -32,7 +32,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	token, err := h.Service.Login(input.Email, input.Password)
 	if err != nil {
 		// Error genérico para no dar pistas a atacantes
-		log.Printf("error: ", err.Error())
+		log.Println("error: ", err.Error())
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales inválidas"})
 		return
 	}

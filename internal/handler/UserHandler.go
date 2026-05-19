@@ -28,7 +28,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		errors := utils.GetValidationError(err)
 
 		if errors != nil {
-			log.Printf("error en la validacion del mensaje", err.Error())
+			log.Println("error en la validacion del mensaje", err.Error())
 			c.JSON(http.StatusConflict, gin.H{"error de formato": errors})
 			return
 		}

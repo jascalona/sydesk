@@ -24,6 +24,7 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 	asH *handler.AsHandler,
 	channelH *handler.ChannelHandler,
 	SupH *handler.SupHandler,
+	ItemsH *handler.ItemHandler,
 ) {
 
 	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
@@ -125,6 +126,12 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 		subproduct := api.Group("/subproduct")
 		{
 			subproduct.GET("/", SupH.GetSup)
+		}
+
+		itemsActivites := api.Group("items")
+		{
+			itemsActivites.GET("/", ItemsH.GetItem)
+			itemsActivites.POST("/", ItemsH.CreatedItem)
 		}
 
 	}
