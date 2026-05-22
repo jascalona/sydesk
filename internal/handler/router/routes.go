@@ -7,27 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// routers structs
+type MainRouters struct {
+	ComponetRouter     *RouterComponent
+	BusinessRouter     *RouterBusiness
+	OrganizationRouter *RouterOrganization
+	AuditRouter        *RouterAudit
+}
+
 // SetupRouter es el administrador central de todos los endpoints de la API
-func SetupRouter(r *gin.Engine, authService domain.AuthServices,
-	userH *handler.UserHandler,
-	rolesH *handler.RolesHandler,
+func SetupRouter(r *gin.Engine, authService domain.AuthServices, routers MainRouters) {
 
-	productH *handler.ProductHandler,
-	componentH *handler.ComponentsHandler,
-	subcomponetH *handler.SubcomponentHandler,
-	envirometH *handler.EnviromentHandler,
-	statusH *handler.StatusHandler,
-	customerH *handler.CustomerHandler,
-	customReoleH *handler.CustomRoleHandler,
-	customPRH *handler.CustomerProductRoleHandler,
-	auditH *handler.AuditHandler,
-	asH *handler.AsHandler,
-	channelH *handler.ChannelHandler,
-	SupH *handler.SupHandler,
-	ItemsH *handler.ItemHandler,
-) {
-
-	// GESTION DE ACCESO PUBLICO (LOGIN Y "REGISTER SI APLICA")
+	// GESTION DE ACCESO PUBLICO (LOGIN)
+	// hay que agregar logica para el registro y recuperacion de clave
 	authH := &handler.AuthHandler{Service: authService}
 
 	r.POST("/login", authH.Login)
@@ -35,104 +27,17 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices,
 
 	// GESTION DE SERVICIOS PROTEGIDOS (API V1)
 	// Grupo principal y aplicacion del bloqueo global
-	api := r.Group("/api/v1")
-	api.Use(handler.Auth(authService))
 
+	api_v1 := r.Group("/api/v1")
+	api_v1.Use(handler.Auth(authService))
 	{
-		// --- GRUPO: USUARIOS ---
-		users := api.Group("/users")
-		{
-			users.GET("", userH.GetAllUsers)
-			users.POST("", userH.CreateUser)
-		}
+		routers.ComponetRouter.RegisterComponents(api_v1.Group("/component"))
 
-		roles := api.Group("/rolesuser")
-		{
-			roles.GET("", rolesH.GetRoles)
-			roles.POST("", rolesH.CreateRole)
-		}
+		routers.OrganizationRouter.RegisterOrganization(api_v1.Group("/organization"))
 
-		// --- GRUPO: PRODUCTOS
-		products := api.Group("/products")
-		{
-			products.GET("", productH.GetAllProduct)
-			products.POST("", productH.CreatedProduct)
-		}
+		routers.BusinessRouter.RegisterBusiness(api_v1.Group("/business"))
 
-		// GRUPO: COMPONENTS
-		components := api.Group("/components")
-		{
-			components.GET("", componentH.GetAllComponents)
-			components.POST("", componentH.CreatedComponents)
-		}
-
-		// GRUPO: Subcomponentes
-		subcomponents := api.Group("/subcomponents")
-		{
-			subcomponents.GET("", subcomponetH.GetAll)
-		}
-
-		// GRUPO: Enviroment
-		enviroment := api.Group("/enviroment")
-		{
-			enviroment.GET("", envirometH.GetEnviroments)
-		}
-
-		// GRUPO: STATUS
-		status := api.Group("/status")
-		{
-			status.GET("", statusH.GetStatus)
-		}
-
-		// GRUPO: CUSTOMERS
-		customer := api.Group("/customers")
-		{
-			customer.GET("", customerH.GetCustomer)
-			customer.POST("", customerH.CreateCustomer)
-		}
-
-		// --- MODULO AUDITORIA ---//
-		audit_service := api.Group("/auditcustom")
-		{
-			audit_service.GET("", auditH.GetAudit)
-		}
-		// trazabilidad de la auditoria comercios
-		as := api.Group("/tradetraceability")
-		{
-			as.GET("", asH.AuditStatus)
-			as.POST("", asH.CreatedAS)
-			as.PATCH("", asH.Update)
-		}
-
-		// GRUPO ROLES CUSTOMERS & CPR
-
-		customRole := api.Group("/customroles")
-		{
-			customRole.GET("", customReoleH.GetAll)
-		}
-
-		customPR := api.Group("/customerpr")
-		{
-			customPR.GET("", customPRH.GetAllCustomPR)
-			customPR.POST("", customPRH.CreatedCPR)
-		}
-
-		// GRUPO DE COMPLEMENTOS PARA EL MODULO DE AUDITORIA
-		channel := api.Group("/channel")
-		{
-			channel.GET("", channelH.GetChannel)
-		}
-
-		subproduct := api.Group("/subproduct")
-		{
-			subproduct.GET("/", SupH.GetSup)
-		}
-
-		itemsActivites := api.Group("items")
-		{
-			itemsActivites.GET("/", ItemsH.GetItem)
-			itemsActivites.POST("/", ItemsH.CreatedItem)
-		}
+		routers.AuditRouter.RegisterAudit(api_v1.Group("/audit"))
 
 	}
 }

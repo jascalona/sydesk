@@ -34,12 +34,13 @@ func (s *UserServiceImpl) Create(ctx context.Context, user *domain.User) error {
 	hash, errHash := bcrypt.GenerateFromPassword([]byte(user.PASSWORD_HASH), length)
 	if errHash != nil {
 		log.Printf("Error al hashear el password: %v", errHash)
-		return fmt.Errorf("Error interno", errHash)
+		return fmt.Errorf("Error interno %v", errHash)
 	}
 
 	// remplazo de del texto plano por el hash y asignacion de rol por defecto
 	user.PASSWORD_HASH = string(hash)
-	user.ROLE_ID = 6 // ROLE DEFAULT READ ONLY
+	//user.ROLE_ID = 6 // ROLE DEFAULT READ ONLY
+	user.IS_ACTIVE = true // IS_ACTIVE TRUE DEFAULT
 
 	// Persistencia de datos
 	err := s.Repo.Create(ctx, user)

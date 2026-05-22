@@ -38,7 +38,17 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	}
 
 	// caso de aprobacion
-	user := domain.User{NAME: reqUser.NAME}
+	user := domain.User{
+		ID:             reqUser.ID,
+		ALIAS:          reqUser.ALIAS,
+		NAME:           reqUser.NAME,
+		SURNAME:        reqUser.SURNAME,
+		EMAIL:          reqUser.EMAIL,
+		PHONE:          reqUser.PHONE,
+		DEPARTAMENT_ID: reqUser.DEPARTAMENT_ID,
+		ROLE_ID:        reqUser.ROLE_ID,
+		IS_ACTIVE:      reqUser.IS_ACTIVE,
+	}
 
 	if err := h.Service.Create(c.Request.Context(), &user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})

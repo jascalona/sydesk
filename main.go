@@ -37,8 +37,9 @@ func main() {
 	dbConn := database.InitDB(cfg.DatabaseURL)
 	defer dbConn.Close()
 
-	// INYECCION DE DEPENDENCIAS (CAPA DE DATOS -> SERVICIO -> HANDLER)
-
+	// =========================================================================
+	// INYECCIÓN DE DEPENDENCIAS (CAPA DE DATOS -> REPOSITORIOS)
+	// =========================================================================
 	authRepo := middlerware.NewAuthRepo(dbConn)
 
 	// Grupo de repositorios bloqueados
@@ -64,7 +65,10 @@ func main() {
 	// Grupo negocio
 	customerRepo := repoBus.NewCustomerRepo(dbConn)
 
-	// Grupo de Servicios
+	// =========================================================================
+	// INYECCIÓN DE DEPENDENCIAS (CAPA DE NEGOCIO -> SERVICIOS)
+	// =========================================================================
+
 	userService := servOrg.NewUserService(userRepo)
 	rolesService := servOrg.NewRoleService(rolesRepo)
 
@@ -84,7 +88,18 @@ func main() {
 	supService := servAudit.NewSupService(supRepo)
 	itemsService := servAudit.NewItemService(itemsRepo)
 
-	// grupo de servicios bloqueados
+	// Servicio de Autenticación (Login/JWT)
+	// Obtenemos la llave secreta desde el .env
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		jwtSecret = "clave_por_defecto_solo_para_dev"
+	}
+	authService := middlerware.NewAuthService(authRepo, jwtSecret)
+
+	// =========================================================================
+	// INYECCIÓN DE DEPENDENCIAS (CAPA DE PRESENTACIÓN -> HANDLERS)
+	// =========================================================================
+
 	userHandler := handler.NewUserHandler(userService)
 	rolesHandler := handler.NewRolesHandler(rolesService)
 
@@ -105,38 +120,47 @@ func main() {
 	supHandler := handler.NewSupHandler(supService)
 	itemsHandler := handler.NewItemHandler(itemsService)
 
-	// Servicio de Autenticación (Login/JWT)
-	// Obtenemos la llave secreta desde el .env
-	jwtSecret := os.Getenv("JWT_SECRET")
-	if jwtSecret == "" {
-		jwtSecret = "clave_por_defecto_solo_para_dev"
-	}
-	authService := middlerware.NewAuthService(authRepo, jwtSecret)
+	// =========================================================================
+	// INSTANCIACIÓN DE ENRUTADORES MODULARES
+	// =========================================================================
 
-	// INICIALIZACIÓN DE GIN Y RUTAS
-	r := gin.Default()
-
-	// Llamamos al Administrador Central de Rutas
-	// Pasamos el router (r), el servicio de auth y los handlers de cada módulo
-	router.SetupRouter(
-		r,
-		authService,
-		userHandler,
-		rolesHandler,
-		productHandler,
+	compRouter := router.NewRouterComponent(
 		componentHandler,
-		subcomponentHandler,
-		enviromentHandler,
-		statusHandler,
-		customerHandler,
 		customRoleHandler,
 		customPRHandler,
+		enviromentHandler,
+		productHandler,
+		statusHandler,
+		subcomponentHandler,
+	)
+
+	orgRouter := router.NewRouterOrganization(userHandler, rolesHandler)
+
+	businessRouter := router.NewRouterBusiness(customerHandler)
+
+	auditRouter := router.NewRouterAudit(
 		auditHandler,
 		asHandler,
 		channelHandler,
-		supHandler,
 		itemsHandler,
+		supHandler,
 	)
+
+	// Agrupamos todos los módulos en la estructura principal del Router
+	apiRouters := router.MainRouters{
+		ComponetRouter:     compRouter,
+		BusinessRouter:     businessRouter,
+		OrganizationRouter: orgRouter,
+		AuditRouter:        auditRouter,
+	}
+
+	// =========================================================================
+	// INICIALIZACIÓN DE GIN Y RUTAS CENTRALES
+	// =========================================================================
+	r := gin.Default()
+
+	// Arrancamos el administrador central con los enrutadores empaquetados
+	router.SetupRouter(r, authService, apiRouters)
 
 	// EJECUCION DEL SERVIDOR
 	port := ":8081"
