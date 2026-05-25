@@ -38,7 +38,7 @@ func (s *RolesServiceImpl) Created(ctx context.Context, rol *domain.Roles) error
 	// persistir en bd
 	err := s.Repo.Created(ctx, rol)
 	if err != nil {
-		log.Printf("error al procesar la solicitud", err.Error())
+		log.Printf("error al procesar la solicitud %v", err.Error())
 		return fmt.Errorf("no se pudo crear el registro, por favor verifique la traza de la operacion")
 	}
 	return nil
