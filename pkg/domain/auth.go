@@ -7,6 +7,7 @@ import (
 type Auth struct {
 	ID            string `json:"id" db:"id"`
 	EMAIL         string `json:"email" db:"email"`
+	IS_ACTIVE     bool   `json:"is_active" db:"is_active"`
 	PASSWORD_HASH string `json:"password_hash" db:"password_hash"`
 
 	// Recuperacion de data UX (despues agregamos el resto segun surja la necesidad)

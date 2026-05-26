@@ -39,8 +39,11 @@ func (s *UserServiceImpl) Create(ctx context.Context, user *domain.User) error {
 
 	// remplazo de del texto plano por el hash y asignacion de rol por defecto
 	user.PASSWORD_HASH = string(hash)
-	//user.ROLE_ID = 6 // ROLE DEFAULT READ ONLY
-	user.IS_ACTIVE = true // IS_ACTIVE TRUE DEFAULT
+	user.ROLE_ID = 27 // ROLE DEFAULT READ ONLY
+
+	// HAY QUE DEFINIR LA LOGICA PARA LA ACTIVACION DE LA CUENTA
+
+	user.IS_ACTIVE = false // IS_ACTIVE FASE DEFAULT
 
 	// Persistencia de datos
 	err := s.Repo.Create(ctx, user)

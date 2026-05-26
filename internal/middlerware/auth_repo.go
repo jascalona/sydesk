@@ -22,13 +22,14 @@ func (r *authRepo) GetByEmail(email string) (*domain.Auth, error) {
 
 	defer cancel()
 
-	query := `SELECT id, email, password_hash FROM users WHERE email = $1`
+	query := `SELECT id, email, password_hash, is_active FROM users WHERE email = $1`
 
 	var user domain.Auth
 	err := r.DB.QueryRowContext(ctx, query, email).Scan(
 		&user.ID,
 		&user.EMAIL,
 		&user.PASSWORD_HASH,
+		&user.IS_ACTIVE, // se agrego a la estructura para la validacion de negocio (si no fue verificado no puede consumir los serviocios)
 	)
 
 	if err != nil {

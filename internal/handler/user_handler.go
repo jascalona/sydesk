@@ -48,7 +48,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		DEPARTAMENT_ID: reqUser.DEPARTAMENT_ID,
 		PASSWORD_HASH:  reqUser.PASSWORD_HASH,
 		ROLE_ID:        reqUser.ROLE_ID,
-		IS_ACTIVE:      reqUser.IS_ACTIVE,
+		//	IS_ACTIVE:      reqUser.IS_ACTIVE,
 	}
 
 	if err := h.Service.Create(c.Request.Context(), &user); err != nil {

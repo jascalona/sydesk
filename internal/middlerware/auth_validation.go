@@ -42,10 +42,17 @@ func (s *UserAuth) Login(email, password string) (string, error) {
 		return "", errors.New("Credenciales Invalidas")
 	}
 
+	// nueva validacion la la logica de registros (usuarios no verificados)
+	if user.IS_ACTIVE != false {
+		log.Println("Lo sentimos este usuario no ha sido verificado", err)
+		return "", fmt.Errorf("Usuario no ha sido verificado")
+	}
+
 	// en caso de validacion exitosa
 	claims := domain.CustomClaims{
 		UserId: user.ID,
 		Email:  email,
+
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * time.Duration(5))), // hasta el momento el tiempo de expiracion es de  1h
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -58,7 +65,7 @@ func (s *UserAuth) Login(email, password string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(s.secretKey))
 	if err != nil {
-		log.Printf("Error signing token", err.Error())
+		log.Println("Error signing token", err.Error())
 		return "", errors.New("Error al generar el token de acceso")
 	}
 

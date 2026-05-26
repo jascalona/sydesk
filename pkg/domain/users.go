@@ -28,7 +28,7 @@ type ValidationUser struct {
 	PASSWORD_HASH  string `json:"password_hash" binding:"required"`
 	DEPARTAMENT_ID int    `json:"departament_id" binding:"required"`
 	ROLE_ID        int    `json:"role_id" binding:"required"`
-	IS_ACTIVE      bool   `json:"is_active" binding:"required"`
+	//IS_ACTIVE      bool   `json:"is_active" binding:"required"`
 }
 
 type UserRepo interface {

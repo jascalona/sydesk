@@ -33,6 +33,12 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	if err != nil {
 		// Error genérico para no dar pistas a atacantes
 		log.Println("error: ", err.Error())
+
+		if err.Error() == "Usuario no verificado" {
+			c.JSON(http.StatusForbidden, gin.H{"error": "Esta cuenta aún no ha sido verificada"})
+			return
+		}
+
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales inválidas"})
 		return
 	}
