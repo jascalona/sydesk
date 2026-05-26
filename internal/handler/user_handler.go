@@ -46,6 +46,7 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		EMAIL:          reqUser.EMAIL,
 		PHONE:          reqUser.PHONE,
 		DEPARTAMENT_ID: reqUser.DEPARTAMENT_ID,
+		PASSWORD_HASH:  reqUser.PASSWORD_HASH,
 		ROLE_ID:        reqUser.ROLE_ID,
 		IS_ACTIVE:      reqUser.IS_ACTIVE,
 	}

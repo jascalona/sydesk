@@ -15,6 +15,14 @@ type MainRouters struct {
 	AuditRouter        *RouterAudit
 }
 
+// Funcion de carga manual para depuracion
+func RegisterUser(r *gin.Engine, ru *handler.UserHandler) {
+	users := r.Group("register")
+	{
+		users.POST("", ru.CreateUser)
+	}
+}
+
 // SetupRouter es el administrador central de todos los endpoints de la API
 func SetupRouter(r *gin.Engine, authService domain.AuthServices, routers MainRouters) {
 

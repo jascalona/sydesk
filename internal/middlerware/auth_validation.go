@@ -31,14 +31,14 @@ func (s *UserAuth) Login(email, password string) (string, error) {
 	user, err := s.repo.GetByEmail(email)
 	if err != nil {
 		// error generico para vulnerabilidades
-		log.Printf("Error search user", err.Error())
+		log.Println("Error search user", err.Error())
 		return "", errors.New("Credenciales Invalidas")
 	}
 
 	// validacion del password_hash
 	err = bcrypt.CompareHashAndPassword([]byte(user.PASSWORD_HASH)[:], []byte(password))
 	if err != nil {
-		log.Printf("Credenciales invalidas", err.Error())
+		log.Println("Error al decifrar credenciales", err.Error())
 		return "", errors.New("Credenciales Invalidas")
 	}
 

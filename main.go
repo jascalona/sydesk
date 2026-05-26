@@ -64,6 +64,7 @@ func main() {
 
 	// Grupo negocio
 	customerRepo := repoBus.NewCustomerRepo(dbConn)
+	contactRepo := repoBus.NewContactRepo(dbConn)
 
 	// =========================================================================
 	// INYECCIÓN DE DEPENDENCIAS (CAPA DE NEGOCIO -> SERVICIOS)
@@ -82,6 +83,8 @@ func main() {
 	customPRService := servComp.NewCustomProductRoleService(customPR)
 
 	customerService := servBus.NewCustomerServ(customerRepo)
+	contactService := servBus.NewContactService(contactRepo)
+
 	auditService := servAudit.NewAuditServ(auditRepo)
 	asService := servAudit.NewAsServ(asRepo)
 	channelService := servAudit.NewChannelServ(channelRepo)
@@ -112,10 +115,12 @@ func main() {
 	customRoleHandler := handler.NewCustomRoleHandler(customRoleService)
 	customPRHandler := handler.NewCustomerProductRoleHandler(customPRService)
 
+	customerHandler := handler.NewCustomerHandler(customerService)
+	contactHandler := handler.NewContactHandler(contactService)
+
 	// grupo de negocio
 	auditHandler := handler.NewAuditHandler(auditService)
 	asHandler := handler.NewAsHandler(asService)
-	customerHandler := handler.NewCustomerHandler(customerService)
 	channelHandler := handler.NewChannelHandler(channelService)
 	supHandler := handler.NewSupHandler(supService)
 	itemsHandler := handler.NewItemHandler(itemsService)
@@ -136,7 +141,7 @@ func main() {
 
 	orgRouter := router.NewRouterOrganization(userHandler, rolesHandler)
 
-	businessRouter := router.NewRouterBusiness(customerHandler)
+	businessRouter := router.NewRouterBusiness(customerHandler, contactHandler)
 
 	auditRouter := router.NewRouterAudit(
 		auditHandler,
@@ -161,6 +166,9 @@ func main() {
 
 	// Arrancamos el administrador central con los enrutadores empaquetados
 	router.SetupRouter(r, authService, apiRouters)
+
+	// se invoca a la funcion para los registros de usuarios para los casos de registros
+	router.RegisterUser(r, userHandler)
 
 	// EJECUCION DEL SERVIDOR
 	port := ":8081"
