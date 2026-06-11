@@ -9,7 +9,7 @@ type Status struct {
 }
 
 type ValidateStatus struct {
-	NAME string `json:name validate:"required, max=200"`
+	NAME string `json:"name" binding:"required, max=200"`
 }
 
 type StatusRepo interface {

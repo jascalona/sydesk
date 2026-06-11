@@ -9,15 +9,19 @@ import (
 type RouterBusiness struct {
 	customer_h *handler.CustomerHandler
 	contact_h  *handler.ContactHandler
+
+	ticket_h *handler.TicketRequestHandler
 }
 
 func NewRouterBusiness(
 	customer *handler.CustomerHandler,
 	contact *handler.ContactHandler,
+	ticket *handler.TicketRequestHandler,
 ) *RouterBusiness {
 	return &RouterBusiness{
 		customer_h: customer,
 		contact_h:  contact,
+		ticket_h:   ticket,
 	}
 }
 
@@ -35,4 +39,9 @@ func (r *RouterBusiness) RegisterBusiness(rg *gin.RouterGroup) {
 		contact.POST("", r.contact_h.CreatedContact)
 	}
 
+	ticket := rg.Group("createdticket")
+	{
+		ticket.GET("", r.ticket_h.GetTicket)
+		ticket.GET("", r.ticket_h.CreatedTicket)
+	}
 }
