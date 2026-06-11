@@ -43,7 +43,7 @@ func (s *UserAuth) Login(email, password string) (string, error) {
 	}
 
 	// nueva validacion la la logica de registros (usuarios no verificados)
-	if user.IS_ACTIVE != false {
+	if user.IS_ACTIVE != true {
 		log.Println("Lo sentimos este usuario no ha sido verificado", err)
 		return "", fmt.Errorf("Usuario no ha sido verificado")
 	}
