@@ -34,7 +34,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		// Error genérico para no dar pistas a atacantes
 		log.Println("error: ", err.Error())
 
-		if err.Error() == "Usuario no verificado" {
+		if err.Error() == "Usuario no ha sido verificado" {
 			c.JSON(http.StatusForbidden, gin.H{"error": "Esta cuenta aún no ha sido verificada"})
 			return
 		}

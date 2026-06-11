@@ -15,7 +15,7 @@ type RouterComponent struct {
 	product_h               *handler.ProductHandler
 	status_h                *handler.StatusHandler
 	subcomponent_h          *handler.SubcomponentHandler
-
+	tyrequest_h             *handler.TypeRequestHandler
 	//priority_h *handler.P
 }
 
@@ -28,6 +28,7 @@ func NewRouterComponent(
 	product *handler.ProductHandler,
 	status *handler.StatusHandler,
 	subcomponent *handler.SubcomponentHandler,
+	tyrequest *handler.TypeRequestHandler,
 ) *RouterComponent {
 	return &RouterComponent{
 		component_h:             component,
@@ -37,6 +38,7 @@ func NewRouterComponent(
 		product_h:               product,
 		status_h:                status,
 		subcomponent_h:          subcomponent,
+		tyrequest_h:             tyrequest,
 	}
 }
 
@@ -82,6 +84,11 @@ func (r *RouterComponent) RegisterComponents(rg *gin.RouterGroup) {
 	subcomponent := rg.Group("subcomponents")
 	{
 		subcomponent.GET("", r.subcomponent_h.GetAll)
+	}
+
+	tyrequest := rg.Group("typerequest")
+	{
+		tyrequest.GET("", r.tyrequest_h.GetTypeRequest)
 	}
 
 }
