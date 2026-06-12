@@ -20,9 +20,11 @@ func NewAuditHandler(s audit.AuditService) *AuditHandler {
 func (h *AuditHandler) GetAudit(c *gin.Context) {
 	parentStr := c.Query("parent_id")
 	if parentStr == "" {
+		log.Println("error")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "parent_id es obligatorio"})
 		return
 	}
+
 	parentID, err := uuid.Parse(parentStr)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "parent_id debe ser un UUID válido"})

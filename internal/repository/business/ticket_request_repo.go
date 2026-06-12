@@ -21,7 +21,7 @@ func (r *TicketRequestRepo) GetAll(ctx context.Context) ([]*business.TicketReque
 		SELECT 
 			id,
 			reported_by_customer_id,
-			affected_customer_id
+			affected_customer_id,
 			ticket_bcv,
 			enviroment,
 			priority,

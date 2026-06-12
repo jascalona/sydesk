@@ -16,7 +16,7 @@ func NewSubcomponentRepo(db *sql.DB) components.SubcomponentsRepo {
 
 func (r *subcomponentRepo) GetAll(ctx context.Context) ([]*components.Subcomponents, error) {
 
-	query := `SELECT id, name, components_id, description, is_active, created_at FROM subcomponents`
+	query := `SELECT id, name, components_id, description, is_active, created_at FROM subcomponents ORDER BY created_at DESC`
 
 	rows, err := r.DB.QueryContext(ctx, query)
 	if err != nil {
@@ -31,6 +31,7 @@ func (r *subcomponentRepo) GetAll(ctx context.Context) ([]*components.Subcompone
 			&subRow.NAME,
 			&subRow.COMPONENT_ID,
 			&subRow.DESC,
+			&subRow.IS_ACTIVE,
 			&subRow.CREATEDAT,
 		)
 		if err != nil {
