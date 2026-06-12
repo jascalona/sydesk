@@ -83,7 +83,7 @@ func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.Ti
 		INSERT INTO ticket_request(
 			id,
 			reported_by_customer_id,
-			affected_customer_id
+			affected_customer_id,
 			ticket_bcv,
 			enviroment,
 			priority,

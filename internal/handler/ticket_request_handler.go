@@ -38,13 +38,14 @@ func (h *TicketRequestHandler) CreatedTicket(c *gin.Context) {
 			c.JSON(http.StatusConflict, gin.H{"error de formato": errors})
 			return
 		}
+		log.Println("error", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "json mal formado"})
 		return
 	}
 
 	// verificacion de campos
 	validation_ticket := domain.TicketRequest{
-		ID:              ticket.ID,
+		//	ID:              ticket.ID,
 		REPORTED_BY:     ticket.REPORTED_BY,
 		AFFECTED_C:      ticket.AFFECTED_C,
 		TICKET_BCV:      ticket.TICKET_BCV,

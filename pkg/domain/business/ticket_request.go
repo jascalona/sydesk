@@ -22,20 +22,20 @@ type TicketRequest struct {
 }
 
 type ValidateTicketRequest struct {
-	ID              string `json:"id" binding:"required, min=13,max=13"`
-	REPORTED_BY     string `json:"reported_by_customer_id" binding:"required, min=6,max=15"`
-	AFFECTED_C      string `json:"affected_customer_id" binding:"required, min=6,max=20"`
-	TICKET_BCV      string `json:"ticket_bcv" binding:"required, min=6,max=6"`
-	ENVIROMENT      string `json:"enviroment" binding:"required, max=100"`
-	PRIORITY        string `json:"priority" binding:"required, max=100"`
-	TYPE_REQUEST    string `json:"type_request" binding:"required, max=100"`
+	//ID              string `json:"id" binding:"required, min=13,max=13"`
+	REPORTED_BY     string `json:"reported_by_customer_id" binding:"required,min=6,max=15"`
+	AFFECTED_C      string `json:"affected_customer_id" binding:"required,min=6,max=20"`
+	TICKET_BCV      string `json:"ticket_bcv" binding:"max=6"`
+	ENVIROMENT      string `json:"enviroment" binding:"required,max=100"`
+	PRIORITY        string `json:"priority" binding:"required,max=100"`
+	TYPE_REQUEST    string `json:"type_request" binding:"required,max=100"`
 	SLA_ID          int    `json:"sla_id" binding:"required"`
 	COMPONENT_ID    int    `json:"components_id" binding:"required"`
 	SUBCOMPONENT_ID int    `json:"subcomponents_id" binding:"required"`
 	CONTACT_ID      int    `json:"contact_id" binding:"required"`
 	TOPIC           string `json:"topic" binding:"required"`
 	DESCRIPTION     string `json:"description" binding:"required"`
-	CREATED_BY      string `json:"created_by" binding:"required, min=6,max=15"`
+	CREATED_BY      string `json:"created_by" binding:"required,min=6,max=15"`
 	CREATED_AT      string `json:"created_at" binding:"required"`
 	EXPIRED_IN      string `json:"expired_in" binding:"required"`
 }
