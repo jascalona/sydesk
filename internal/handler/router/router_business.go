@@ -52,7 +52,7 @@ func (r *RouterBusiness) RegisterBusiness(rg *gin.RouterGroup) {
 	{
 		ticket_b_h.GET("", r.ticket_b_h.GetTicketBreak)
 		ticket_b_h.POST("", r.ticket_b_h.CreatedTBreak)
-
+		ticket_b_h.GET("/id/:id/", r.ticket_b_h.StatusTicketById)
 	}
 
 }

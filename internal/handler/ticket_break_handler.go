@@ -70,3 +70,20 @@ func (h *TicketBreakHandler) CreatedTBreak(c *gin.Context) {
 	c.JSON(http.StatusCreated, "Solicitud procesada")
 
 }
+
+func (h *TicketBreakHandler) StatusTicketById(c *gin.Context) {
+	ticket_id := c.Param("id")
+
+	if ticket_id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "El id del ticket es requerido"})
+		return
+	}
+
+	status_ticket, err := h.Service.GetTicketId(c.Request.Context(), ticket_id)
+	if err != nil {
+		log.Println("error: ", err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"Error Interno": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, status_ticket)
+}

@@ -33,6 +33,8 @@ func (r *TicketBreakRepo) GetAll(ctx context.Context) ([]*business.TicketBreak, 
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	ticket_break := make([]*business.TicketBreak, 0)
 
 	for rows.Next() {
@@ -82,4 +84,44 @@ func (r *TicketBreakRepo) Created(ctx context.Context, t_break *business.TicketB
 	}
 
 	return nil
+}
+
+func (r *TicketBreakRepo) GetTicketId(ctx context.Context, ticket_id string) ([]*business.TicketBreak, error) {
+
+	query := `
+		SELECT
+			id,
+			ticket_id,
+			status_paused,
+			start_at,
+			end_at,
+			created_at
+		FROM ticket_break WHERE ticket_id = $1 ORDER BY created_at DESC`
+
+	rows, err := r.DB.QueryContext(ctx, query, ticket_id)
+	if err != nil {
+		log.Println("Demonios viejo, error al correr el query", err)
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var status_ticket []*business.TicketBreak
+	for rows.Next() {
+		tb := &business.TicketBreak{}
+		err := rows.Scan(
+			&tb.ID,
+			&tb.TICKET_ID,
+			&tb.STS_P,
+			&tb.START_AT,
+			&tb.END_AT,
+			&tb.CREATED_AT,
+		)
+		if err != nil {
+			return nil, err
+		}
+		status_ticket = append(status_ticket, tb)
+	}
+
+	return status_ticket, nil
 }

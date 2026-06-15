@@ -10,6 +10,7 @@ import (
 type TicketBreakServ interface {
 	GetAll(ctx context.Context) ([]*business.TicketBreak, error)
 	Created(ctx context.Context, t_break *business.TicketBreak) error
+	GetTicketId(ctx context.Context, ticket_id string) ([]*business.TicketBreak, error)
 }
 
 type TicketBreakSrvImpl struct {
@@ -41,4 +42,21 @@ func (s *TicketBreakSrvImpl) Created(ctx context.Context, t_break *business.Tick
 	}
 
 	return nil
+}
+
+func (s *TicketBreakSrvImpl) GetTicketId(ctx context.Context, ticket_id string) ([]*business.TicketBreak, error) {
+	if ticket_id == "" {
+		return nil, fmt.Errorf("Error service: el ID del ticket es requerido")
+	}
+
+	ticket_break, err := s.Repo.GetTicketId(ctx, ticket_id)
+
+	if err != nil {
+		log.Println(ticket_id)
+		log.Println("Error service: no se pudo obtener los estados del ticket: ", ticket_break)
+		return nil, fmt.Errorf("no se pudo obtener los estados del ticket: %w", err)
+	}
+
+	return ticket_break, nil
+
 }

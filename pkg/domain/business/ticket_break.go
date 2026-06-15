@@ -21,4 +21,5 @@ type ValidateTicketBreak struct {
 type InterfaceBreak interface {
 	GetAll(ctx context.Context) ([]*TicketBreak, error)
 	Created(ctx context.Context, t_break *TicketBreak) error
+	GetTicketId(ctx context.Context, ticket_id string) ([]*TicketBreak, error)
 }
