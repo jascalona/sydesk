@@ -51,6 +51,8 @@ func (r *RouterBusiness) RegisterBusiness(rg *gin.RouterGroup) {
 	ticket_b_h := rg.Group("ticketbreak")
 	{
 		ticket_b_h.GET("", r.ticket_b_h.GetTicketBreak)
+		ticket_b_h.POST("", r.ticket_b_h.CreatedTBreak)
+
 	}
 
 }

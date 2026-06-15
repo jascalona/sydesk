@@ -58,3 +58,28 @@ func (r *TicketBreakRepo) GetAll(ctx context.Context) ([]*business.TicketBreak, 
 
 	return ticket_break, nil
 }
+
+func (r *TicketBreakRepo) Created(ctx context.Context, t_break *business.TicketBreak) error {
+
+	query := `
+		INSERT INTO ticket_break(
+			ticket_id,
+			status_paused,
+			start_at,
+			end_at)
+			VALUES($1,$2,$3,$4)`
+
+	_, err := r.DB.ExecContext(ctx, query,
+		t_break.TICKET_ID,
+		t_break.STS_P,
+		t_break.START_AT,
+		t_break.END_AT,
+	)
+
+	if err != nil {
+		log.Println("error al correr el query")
+		return err
+	}
+
+	return nil
+}
