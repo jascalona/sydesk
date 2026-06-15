@@ -67,6 +67,7 @@ func main() {
 	customerRepo := repoBus.NewCustomerRepo(dbConn)
 	contactRepo := repoBus.NewContactRepo(dbConn)
 	ticket := repoBus.NewTicketRequest(dbConn)
+	ticketBreak := repoBus.NewTicketBreakRepo(dbConn)
 
 	// =========================================================================
 	// INYECCIÓN DE DEPENDENCIAS (CAPA DE NEGOCIO -> SERVICIOS)
@@ -88,6 +89,7 @@ func main() {
 	customerService := servBus.NewCustomerServ(customerRepo)
 	contactService := servBus.NewContactService(contactRepo)
 	ticketService := servBus.NewTicketRequestServ(ticket)
+	ticketBreakService := servBus.NewTicketBreakServ(ticketBreak)
 
 	auditService := servAudit.NewAuditServ(auditRepo)
 	asService := servAudit.NewAsServ(asRepo)
@@ -123,6 +125,7 @@ func main() {
 	customerHandler := handler.NewCustomerHandler(customerService)
 	contactHandler := handler.NewContactHandler(contactService)
 	ticketHandler := handler.NewTicketRequestHandler(ticketService)
+	ticketBreakHandler := handler.NewTicketBreakHandler(ticketBreakService)
 
 	// grupo de negocio
 	auditHandler := handler.NewAuditHandler(auditService)
@@ -152,6 +155,7 @@ func main() {
 		customerHandler,
 		contactHandler,
 		ticketHandler,
+		ticketBreakHandler,
 	)
 
 	auditRouter := router.NewRouterAudit(

@@ -33,7 +33,7 @@ func (s *TicketRequestServImpl) GetAll(ctx context.Context) ([]*business.TicketR
 	ticket, err := s.Repo.GetAll(ctx)
 	if err != nil {
 		log.Println("Error al obtener los registros: ", err.Error())
-		return nil, fmt.Errorf("error al obtener los registros")
+		return nil, fmt.Errorf("Error al obtener los registros")
 	}
 	return ticket, nil
 }
