@@ -29,7 +29,7 @@ func (r *authRepo) GetByEmail(email string) (*domain.Auth, error) {
 		&user.ID,
 		&user.EMAIL,
 		&user.PASSWORD_HASH,
-		&user.IS_ACTIVE, // se agrego a la estructura para la validacion de negocio (si no fue verificado no puede consumir los serviocios)
+		&user.IS_ACTIVE, // se agrego a la estructura para la validacion de negocio (si no fue verificado no puede consumir los servicios)
 	)
 
 	if err != nil {

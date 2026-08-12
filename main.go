@@ -9,6 +9,7 @@ import (
 	"sydesk/internal/handler/router"
 	"sydesk/internal/middlerware"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
@@ -178,6 +179,14 @@ func main() {
 	// INICIALIZACIÓN DE GIN Y RUTAS CENTRALES
 	// =========================================================================
 	r := gin.Default()
+
+	// configuracion del cors
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		AllowCredentials: true,
+	}))
 
 	// Arrancamos el administrador central con los enrutadores empaquetados
 	router.SetupRouter(r, authService, apiRouters)
