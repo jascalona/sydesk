@@ -3,7 +3,7 @@ package organization
 import (
 	"context"
 	"database/sql"
-	"sydesk/pkg/domain"
+	domain "sydesk/pkg/domain/organization"
 )
 
 type userRepo struct {

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"sydesk/pkg/domain"
+	domain "sydesk/pkg/domain/organization"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"

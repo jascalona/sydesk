@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"sydesk/pkg/domain"
+	domain "sydesk/pkg/domain/organization"
 )
 
 type RolesServices interface {

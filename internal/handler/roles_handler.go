@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 	"sydesk/internal/service/organization"
-	"sydesk/pkg/domain"
+	domain "sydesk/pkg/domain/organization"
 	"sydesk/pkg/utils"
 
 	"github.com/gin-gonic/gin"

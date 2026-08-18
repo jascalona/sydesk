@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"log"
-	"sydesk/pkg/domain"
+	domain "sydesk/pkg/domain/organization"
 	"time"
 )
 

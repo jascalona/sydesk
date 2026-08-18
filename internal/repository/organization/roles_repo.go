@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log"
-	"sydesk/pkg/domain"
+	domain "sydesk/pkg/domain/organization"
 )
 
 type rolesRepo struct {

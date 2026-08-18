@@ -2,7 +2,7 @@ package router
 
 import (
 	"sydesk/internal/handler"
-	"sydesk/pkg/domain"
+	domain "sydesk/pkg/domain/organization"
 
 	"github.com/gin-gonic/gin"
 )
