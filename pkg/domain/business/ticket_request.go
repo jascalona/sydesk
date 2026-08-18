@@ -8,7 +8,7 @@ type TicketRequest struct {
 	AFFECTED_C      string `json:"affected_customer_id" db:"affected_customer_id"`
 	TICKET_BCV      string `json:"ticket_bcv" db:"ticket_bcv"`
 	ENVIROMENT      string `json:"enviroment" db:"enviroment"`
-	PRIORITY        string `json:"priority" db:"priority"`
+	PRIORITY        int    `json:"priority" db:"priority"`
 	TYPE_REQUEST    string `json:"type_request" db:"type_request"`
 	SLA_ID          int    `json:"sla_id" db:"sla_id"`
 	COMPONENT_ID    int    `json:"components_id" db:"components_id"`
@@ -21,13 +21,34 @@ type TicketRequest struct {
 	EXPIRED_IN      string `json:"expired_in" db:"expired_in"`
 }
 
+// Struct vw consumer
+type VWTicketRequest struct {
+	ID                 string  `json:"id" db:"id"`
+	TICKET_BCV         string  `json:"ticket_bcv" db:"ticket_bcv"`
+	ENVIROMENT         string  `json:"enviroment" db:"enviroment"`
+	TYPE_REQUEST       string  `json:"type_request" db:"type_request"`
+	TOPIC              string  `json:"topic" db:"topic"`
+	DESCRIPTION        string  `json:"description" db:"description"`
+	CREATED_BY         string  `json:"created_by" db:"created_by"`
+	CREATED_AT         string  `json:"created_at" db:"created_at"`
+	EXPIRED_IN         string  `json:"expired_in" db:"expired_in"`
+	PRIORITY           string  `json:"priority" db:"priority"`
+	REPORTED_BY_CUSTOM string  `json:"reported_by_customer" db:"reported_by_customer"`
+	AFFECTED_C         string  `json:"affected_customer" db:"affected_customer"`
+	SLA                string  `json:"sla" db:"sla"`
+	COMPONENT          string  `json:"component" db:"component"`
+	SUBCOMPONENT       string  `json:"subcomponent" db:"subcomponent"`
+	CONTACT            *string `json:"contact" db:"contact"`
+	CURRENT_STATUS     string  `json:"current_status" db:"current_status"`
+}
+
 type ValidateTicketRequest struct {
 	//ID              string `json:"id" binding:"required, min=13,max=13"`
 	REPORTED_BY     string `json:"reported_by_customer_id" binding:"required,min=6,max=15"`
 	AFFECTED_C      string `json:"affected_customer_id" binding:"required,min=6,max=20"`
 	TICKET_BCV      string `json:"ticket_bcv" binding:"max=6"`
 	ENVIROMENT      string `json:"enviroment" binding:"required,max=100"`
-	PRIORITY        string `json:"priority" binding:"required,max=100"`
+	PRIORITY        int    `json:"priority" binding:"required,max=100"`
 	TYPE_REQUEST    string `json:"type_request" binding:"required,max=100"`
 	SLA_ID          int    `json:"sla_id" binding:"required"`
 	COMPONENT_ID    int    `json:"components_id" binding:"required"`
@@ -43,4 +64,7 @@ type ValidateTicketRequest struct {
 type InterfaceTicketRequest interface {
 	GetAll(ctx context.Context) ([]*TicketRequest, error)
 	Created(ctx context.Context, new_ticket *TicketRequest) error
+
+	// interfaz dedica al consumo de vistas
+	GetVWTicketRequest(ctx context.Context) ([]*VWTicketRequest, error)
 }

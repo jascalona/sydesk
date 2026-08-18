@@ -78,6 +78,75 @@ func (r *TicketRequestRepo) GetAll(ctx context.Context) ([]*business.TicketReque
 
 }
 
+// VW CONSUMER REQUEST
+func (r *TicketRequestRepo) GetVWTicketRequest(ctx context.Context) ([]*business.VWTicketRequest, error) {
+	query := `
+		SELECT 
+			id,
+			ticket_bcv,
+			enviroment,
+			type_request,
+			topic,
+			description,
+			created_by,
+			created_at,
+			expired_in,
+			priority,
+			reported_by_customer,
+			affected_customer,
+			sla,
+			component,
+			subcomponent,
+			contact,
+			current_status
+		FROM vw_ticket_request_details ORDER BY created_at DESC`
+
+	rows, err := r.DB.QueryContext(ctx, query)
+
+	if err != nil {
+		log.Println("ERROR AL CORRER EL QUERY: ", err.Error())
+		return nil, err
+	}
+
+	vw_request := make([]*business.VWTicketRequest, 0)
+
+	for rows.Next() {
+		vw_r := &business.VWTicketRequest{}
+		err := rows.Scan(
+			&vw_r.ID,
+			&vw_r.TICKET_BCV,
+			&vw_r.ENVIROMENT,
+			&vw_r.TYPE_REQUEST,
+			&vw_r.TOPIC,
+			&vw_r.DESCRIPTION,
+			&vw_r.CREATED_BY,
+			&vw_r.CREATED_AT,
+			&vw_r.EXPIRED_IN,
+			&vw_r.PRIORITY,
+			&vw_r.REPORTED_BY_CUSTOM,
+			&vw_r.AFFECTED_C,
+			&vw_r.SLA,
+			&vw_r.COMPONENT,
+			&vw_r.SUBCOMPONENT,
+			&vw_r.CONTACT,
+			&vw_r.CURRENT_STATUS,
+		)
+
+		if err != nil {
+			log.Println("Error al aplicar el escaner: ", err.Error())
+			return nil, err
+		}
+
+		vw_request = append(vw_request, vw_r)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return vw_request, nil
+}
+
 func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.TicketRequest) error {
 	query := `
 		INSERT INTO ticket_request(
