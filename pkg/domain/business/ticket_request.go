@@ -38,8 +38,9 @@ type VWTicketRequest struct {
 	SLA                string  `json:"sla" db:"sla"`
 	COMPONENT          string  `json:"component" db:"component"`
 	SUBCOMPONENT       string  `json:"subcomponent" db:"subcomponent"`
+	PRODUCT            string  `json:"product" db:"product"`
 	CONTACT            *string `json:"contact" db:"contact"`
-	CURRENT_STATUS     string  `json:"current_status" db:"current_status"`
+	CURRENT_STATUS     *string `json:"current_status" db:"current_status"`
 }
 
 type ValidateTicketRequest struct {

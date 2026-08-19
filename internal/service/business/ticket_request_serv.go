@@ -15,6 +15,7 @@ import (
 type TicketRequestServ interface {
 	GetAll(ctx context.Context) ([]*business.TicketRequest, error)
 	Created(ctx context.Context, new_ticket *business.TicketRequest) error
+	GetVWTicketRequest(ctx context.Context) ([]*business.VWTicketRequest, error)
 }
 
 type TicketRequestServImpl struct {
@@ -27,6 +28,16 @@ func NewTicketRequestServ(repo business.InterfaceTicketRequest) TicketRequestSer
 		Repo:     repo,
 		validate: validator.New(),
 	}
+}
+
+// METODO PARA LA VISTA
+func (s *TicketRequestServImpl) GetVWTicketRequest(ctx context.Context) ([]*business.VWTicketRequest, error) {
+	vw_ticket, err := s.Repo.GetVWTicketRequest(ctx)
+	if err != nil {
+		log.Println("Error al obtener los registros: ", err.Error())
+		return nil, fmt.Errorf("Error al obtener los registros")
+	}
+	return vw_ticket, nil
 }
 
 func (s *TicketRequestServImpl) GetAll(ctx context.Context) ([]*business.TicketRequest, error) {

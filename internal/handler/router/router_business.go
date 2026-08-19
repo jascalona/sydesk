@@ -44,7 +44,7 @@ func (r *RouterBusiness) RegisterBusiness(rg *gin.RouterGroup) {
 
 	ticket := rg.Group("ticketrequest")
 	{
-		ticket.GET("", r.ticket_h.GetTicket)
+		ticket.GET("", r.ticket_h.GetVWTicketRequest)
 		ticket.POST("", r.ticket_h.CreatedTicket)
 	}
 

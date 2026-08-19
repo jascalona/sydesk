@@ -97,6 +97,7 @@ func (r *TicketRequestRepo) GetVWTicketRequest(ctx context.Context) ([]*business
 			sla,
 			component,
 			subcomponent,
+			product,
 			contact,
 			current_status
 		FROM vw_ticket_request_details ORDER BY created_at DESC`
@@ -128,6 +129,7 @@ func (r *TicketRequestRepo) GetVWTicketRequest(ctx context.Context) ([]*business
 			&vw_r.SLA,
 			&vw_r.COMPONENT,
 			&vw_r.SUBCOMPONENT,
+			&vw_r.PRODUCT,
 			&vw_r.CONTACT,
 			&vw_r.CURRENT_STATUS,
 		)

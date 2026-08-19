@@ -18,11 +18,22 @@ func NewTicketRequestHandler(s business.TicketRequestServ) *TicketRequestHandler
 	return &TicketRequestHandler{Service: s}
 }
 
+func (h *TicketRequestHandler) GetVWTicketRequest(c *gin.Context) {
+	vw_ticket, err := h.Service.GetVWTicketRequest(c.Request.Context())
+	if err != nil {
+		log.Println("Error al obtener los registros: ", err.Error())
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, vw_ticket)
+}
+
 func (h *TicketRequestHandler) GetTicket(c *gin.Context) {
 	ticket, err := h.Service.GetAll(c.Request.Context())
 	if err != nil {
 		log.Println("Error al obtener los registros ", err.Error())
 		c.JSON(http.StatusInternalServerError, err)
+		return
 	}
 	c.JSON(http.StatusOK, ticket)
 }

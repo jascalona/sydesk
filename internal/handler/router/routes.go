@@ -30,7 +30,7 @@ func SetupRouter(r *gin.Engine, authService domain.AuthServices, routers MainRou
 	// hay que agregar logica para el registro y recuperacion de clave
 	authH := &handler.AuthHandler{Service: authService}
 
-	r.POST("/login", authH.Login)
+	r.POST("/api/v1/login", authH.Login)
 	r.GET("/health", func(c *gin.Context) { c.Status(200) })
 
 	// GESTION DE SERVICIOS PROTEGIDOS (API V1)
