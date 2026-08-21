@@ -188,7 +188,7 @@ func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.Ti
 		new_ticket.EXPIRED_IN,
 	)
 	if err != nil {
-		log.Printf("error al correr el insert")
+		log.Printf("Error al correr el query")
 		return err
 	}
 	return nil

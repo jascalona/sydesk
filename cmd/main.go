@@ -69,6 +69,7 @@ func main() {
 	contactRepo := repoBus.NewContactRepo(dbConn)
 	ticket := repoBus.NewTicketRequest(dbConn)
 	ticketBreak := repoBus.NewTicketBreakRepo(dbConn)
+	taskRequest := repoBus.NewTaskRequestRepo(dbConn)
 
 	// =========================================================================
 	// INYECCIÓN DE DEPENDENCIAS (CAPA DE NEGOCIO -> SERVICIOS)
@@ -87,11 +88,14 @@ func main() {
 	customPRService := servComp.NewCustomProductRoleService(customPR)
 	tyrequestService := servComp.NewTypeRequestService(tyrequest)
 
+	// GRUPO DE NEGOCIO
 	customerService := servBus.NewCustomerServ(customerRepo)
 	contactService := servBus.NewContactService(contactRepo)
 	ticketService := servBus.NewTicketRequestServ(ticket)
 	ticketBreakService := servBus.NewTicketBreakServ(ticketBreak)
+	taskRequestService := servBus.NewTaskRequestServ(taskRequest)
 
+	// GRUPO DE AUDITORIA
 	auditService := servAudit.NewAuditServ(auditRepo)
 	asService := servAudit.NewAsServ(asRepo)
 	channelService := servAudit.NewChannelServ(channelRepo)
@@ -123,12 +127,14 @@ func main() {
 	customPRHandler := handler.NewCustomerProductRoleHandler(customPRService)
 	tyrequestHandler := handler.NewTypeRequestHandler(tyrequestService)
 
+	// GRUPO DE NEGOCIO
 	customerHandler := handler.NewCustomerHandler(customerService)
 	contactHandler := handler.NewContactHandler(contactService)
 	ticketHandler := handler.NewTicketRequestHandler(ticketService)
 	ticketBreakHandler := handler.NewTicketBreakHandler(ticketBreakService)
+	taskRequestHandler := handler.NewTaskRequestHandler(taskRequestService)
 
-	// grupo de negocio
+	// grupo de auditoria
 	auditHandler := handler.NewAuditHandler(auditService)
 	asHandler := handler.NewAsHandler(asService)
 	channelHandler := handler.NewChannelHandler(channelService)
@@ -157,6 +163,7 @@ func main() {
 		contactHandler,
 		ticketHandler,
 		ticketBreakHandler,
+		taskRequestHandler,
 	)
 
 	auditRouter := router.NewRouterAudit(
