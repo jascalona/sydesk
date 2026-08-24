@@ -57,7 +57,6 @@ func (h *TicketRequestHandler) CreatedTicket(c *gin.Context) {
 	// verificacion de campos
 	validation_ticket := domain.TicketRequest{
 		//	ID:              ticket.ID,
-		REPORTED_BY:     ticket.REPORTED_BY,
 		AFFECTED_C:      ticket.AFFECTED_C,
 		TICKET_BCV:      ticket.TICKET_BCV,
 		ENVIROMENT:      ticket.ENVIROMENT,

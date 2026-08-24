@@ -20,7 +20,6 @@ func (r *TicketRequestRepo) GetAll(ctx context.Context) ([]*business.TicketReque
 	query := `
 		SELECT 
 			id,
-			reported_by_customer_id,
 			affected_customer_id,
 			ticket_bcv,
 			enviroment,
@@ -49,7 +48,6 @@ func (r *TicketRequestRepo) GetAll(ctx context.Context) ([]*business.TicketReque
 		tRow := &business.TicketRequest{}
 		err := rows.Scan(
 			&tRow.ID,
-			&tRow.REPORTED_BY,
 			&tRow.AFFECTED_C,
 			&tRow.TICKET_BCV,
 			&tRow.ENVIROMENT,
@@ -92,7 +90,6 @@ func (r *TicketRequestRepo) GetVWTicketRequest(ctx context.Context) ([]*business
 			created_at,
 			expired_in,
 			priority,
-			reported_by_customer,
 			affected_customer,
 			sla,
 			component,
@@ -124,7 +121,6 @@ func (r *TicketRequestRepo) GetVWTicketRequest(ctx context.Context) ([]*business
 			&vw_r.CREATED_AT,
 			&vw_r.EXPIRED_IN,
 			&vw_r.PRIORITY,
-			&vw_r.REPORTED_BY_CUSTOM,
 			&vw_r.AFFECTED_C,
 			&vw_r.SLA,
 			&vw_r.COMPONENT,
@@ -153,7 +149,6 @@ func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.Ti
 	query := `
 		INSERT INTO ticket_request(
 			id,
-			reported_by_customer_id,
 			affected_customer_id,
 			ticket_bcv,
 			enviroment,
@@ -167,11 +162,10 @@ func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.Ti
 			description,
 			created_by,
 			created_at,
-			expired_in)VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`
+			expired_in)VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`
 
 	_, err := r.DB.ExecContext(ctx, query,
 		new_ticket.ID,
-		new_ticket.REPORTED_BY,
 		new_ticket.AFFECTED_C,
 		new_ticket.TICKET_BCV,
 		new_ticket.ENVIROMENT,
