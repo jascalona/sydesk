@@ -6,7 +6,7 @@ type TicketRequest struct {
 	ID              string `json:"id" db:"id"`
 	AFFECTED_C      string `json:"affected_customer_id" db:"affected_customer_id"`
 	TICKET_BCV      string `json:"ticket_bcv" db:"ticket_bcv"`
-	ENVIROMENT      string `json:"enviroment" db:"enviroment"`
+	ENVIROMENT      int    `json:"environment_id" db:"environment_id"`
 	PRIORITY        int    `json:"priority" db:"priority"`
 	TYPE_REQUEST    string `json:"type_request" db:"type_request"`
 	SLA_ID          int    `json:"sla_id" db:"sla_id"`
@@ -24,7 +24,7 @@ type TicketRequest struct {
 type VWTicketRequest struct {
 	ID             string  `json:"id" db:"id"`
 	TICKET_BCV     string  `json:"ticket_bcv" db:"ticket_bcv"`
-	ENVIROMENT     string  `json:"enviroment" db:"enviroment"`
+	ENVIROMENT     string  `json:"environment_id" db:"environment_id"`
 	TYPE_REQUEST   string  `json:"type_request" db:"type_request"`
 	TOPIC          string  `json:"topic" db:"topic"`
 	DESCRIPTION    string  `json:"description" db:"description"`
@@ -45,7 +45,7 @@ type ValidateTicketRequest struct {
 	//ID              string `json:"id" binding:"required, min=13,max=13"`
 	AFFECTED_C      string `json:"affected_customer_id" binding:"required,min=6,max=20"`
 	TICKET_BCV      string `json:"ticket_bcv" binding:"max=6"`
-	ENVIROMENT      string `json:"enviroment" binding:"required,max=100"`
+	ENVIROMENT      int    `json:"environment_id" binding:"required"`
 	PRIORITY        int    `json:"priority" binding:"required,max=100"`
 	TYPE_REQUEST    string `json:"type_request" binding:"required,max=100"`
 	SLA_ID          int    `json:"sla_id" binding:"required"`
