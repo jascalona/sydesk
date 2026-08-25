@@ -56,6 +56,7 @@ func main() {
 	customRole := repoCom.NewCustomRoleRepo(dbConn)
 	customPR := repoCom.NewCustomProductRoleRepo(dbConn)
 	tyrequest := repoCom.NewTypeRequestRepo(dbConn)
+	priorityRepo := repoCom.NewPriorityRepo(dbConn)
 
 	// AUDITORIA
 	auditRepo := repoAudit.NewAuditRepo(dbConn)
@@ -87,6 +88,7 @@ func main() {
 	customRoleService := servComp.NewCustomRoleService(customRole)
 	customPRService := servComp.NewCustomProductRoleService(customPR)
 	tyrequestService := servComp.NewTypeRequestService(tyrequest)
+	priorityServ := servComp.NewPriorityServ(priorityRepo)
 
 	// GRUPO DE NEGOCIO
 	customerService := servBus.NewCustomerServ(customerRepo)
@@ -126,6 +128,7 @@ func main() {
 	customRoleHandler := handler.NewCustomRoleHandler(customRoleService)
 	customPRHandler := handler.NewCustomerProductRoleHandler(customPRService)
 	tyrequestHandler := handler.NewTypeRequestHandler(tyrequestService)
+	priorityHandler := handler.NewPriorityHandler(priorityServ)
 
 	// GRUPO DE NEGOCIO
 	customerHandler := handler.NewCustomerHandler(customerService)
@@ -154,6 +157,7 @@ func main() {
 		statusHandler,
 		subcomponentHandler,
 		tyrequestHandler,
+		priorityHandler,
 	)
 
 	orgRouter := router.NewRouterOrganization(userHandler, rolesHandler)

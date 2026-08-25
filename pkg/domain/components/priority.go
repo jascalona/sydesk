@@ -9,9 +9,9 @@ type Priority struct {
 }
 
 type ValidatePriority struct {
-	NAME string `json:"name" validate="required,max=100"`
+	NAME string `json:"name" binding:"required,max=100"`
 }
 
-type PriorityRepo interface {
+type InterfacePriority interface {
 	GetAll(ctx context.Context) ([]*Priority, error)
 }

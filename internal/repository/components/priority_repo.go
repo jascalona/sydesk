@@ -10,7 +10,7 @@ type priorityRepo struct {
 	DB *sql.DB
 }
 
-func NewPriorityRepo(db *sql.DB) components.PriorityRepo {
+func NewPriorityRepo(db *sql.DB) components.InterfacePriority {
 	return &priorityRepo{DB: db}
 }
 

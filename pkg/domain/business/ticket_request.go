@@ -8,7 +8,7 @@ type TicketRequest struct {
 	TICKET_BCV      string `json:"ticket_bcv" db:"ticket_bcv"`
 	ENVIROMENT      int    `json:"environment_id" db:"environment_id"`
 	PRIORITY        int    `json:"priority" db:"priority"`
-	TYPE_REQUEST    string `json:"type_request" db:"type_request"`
+	TYPE_REQUEST    int    `json:"type_request" db:"type_request"`
 	SLA_ID          int    `json:"sla_id" db:"sla_id"`
 	COMPONENT_ID    int    `json:"components_id" db:"components_id"`
 	SUBCOMPONENT_ID int    `json:"subcomponents_id" db:"subcomponents_id"`
@@ -47,7 +47,7 @@ type ValidateTicketRequest struct {
 	TICKET_BCV      string `json:"ticket_bcv" binding:"max=6"`
 	ENVIROMENT      int    `json:"environment_id" binding:"required"`
 	PRIORITY        int    `json:"priority" binding:"required,max=100"`
-	TYPE_REQUEST    string `json:"type_request" binding:"required,max=100"`
+	TYPE_REQUEST    int    `json:"type_request" binding:"required"`
 	SLA_ID          int    `json:"sla_id" binding:"required"`
 	COMPONENT_ID    int    `json:"components_id" binding:"required"`
 	SUBCOMPONENT_ID int    `json:"subcomponents_id" binding:"required"`
