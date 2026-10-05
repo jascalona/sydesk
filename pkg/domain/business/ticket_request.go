@@ -13,7 +13,7 @@ type TicketRequest struct {
 	SLA_ID          int    `json:"sla_id" db:"sla_id"`
 	COMPONENT_ID    int    `json:"components_id" db:"components_id"`
 	SUBCOMPONENT_ID int    `json:"subcomponents_id" db:"subcomponents_id"`
-	CONTACT_ID      int    `json:"contact_id" db:"contact_id"`
+	CONTACT_ID      *int   `json:"contact_id" db:"contact_id"`
 	TOPIC           string `json:"topic" db:"topic"`
 	DESCRIPTION     string `json:"description" db:"description"`
 	CREATED_BY      string `json:"created_by" db:"created_by"`
@@ -53,7 +53,7 @@ type ValidateTicketRequest struct {
 	SLA_ID          int    `json:"sla_id" binding:"required"`
 	COMPONENT_ID    int    `json:"components_id" binding:"required"`
 	SUBCOMPONENT_ID int    `json:"subcomponents_id" binding:"required"`
-	CONTACT_ID      int    `json:"contact_id" binding:"required"`
+	CONTACT_ID      *int   `json:"contact_id" binding:"omitempty"`
 	TOPIC           string `json:"topic" binding:"required"`
 	DESCRIPTION     string `json:"description" binding:"required"`
 	CREATED_BY      string `json:"created_by" binding:"required,min=6,max=15"`
