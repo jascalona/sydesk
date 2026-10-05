@@ -54,6 +54,13 @@ func (h *TicketRequestHandler) CreatedTicket(c *gin.Context) {
 		return
 	}
 
+	toNullable := func(v int) *int {
+		if v == 0 {
+			return nil
+		}
+		return &v
+	}
+
 	// verificacion de campos
 	validation_ticket := domain.TicketRequest{
 		//	ID:              ticket.ID,
@@ -66,7 +73,7 @@ func (h *TicketRequestHandler) CreatedTicket(c *gin.Context) {
 		SLA_ID:          ticket.SLA_ID,
 		COMPONENT_ID:    ticket.COMPONENT_ID,
 		SUBCOMPONENT_ID: ticket.SUBCOMPONENT_ID,
-		CONTACT_ID:      ticket.CONTACT_ID,
+		CONTACT_ID:      toNullable(*ticket.CONTACT_ID),
 		TOPIC:           ticket.TOPIC,
 		DESCRIPTION:     ticket.DESCRIPTION,
 		CREATED_BY:      ticket.CREATED_BY,
