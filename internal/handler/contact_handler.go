@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"sydesk/internal/service/business"
 	validation "sydesk/pkg/domain/business"
 	"sydesk/pkg/utils"
@@ -20,12 +21,22 @@ func NewContactHandler(s business.ContactService) *ContactHandler {
 
 func (h *ContactHandler) GetContact(c *gin.Context) {
 
-	contact, err := h.Service.GetAll(c.Request.Context())
+	customerID := c.Query("customer_id")
+
+	customerIDInt, err := strconv.Atoi(customerID)
+	if err != nil {
+		log.Printf("Error: customer_id debe ser un número válido")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "customer_id debe ser un número válido"})
+		return
+	}
+
+	contact, err := h.Service.ContactByCustomerID(c.Request.Context(), customerIDInt)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, contact)
+
 }
 
 func (h *ContactHandler) CreatedContact(c *gin.Context) {

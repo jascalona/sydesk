@@ -15,7 +15,7 @@ func NewContactRepo(db *sql.DB) business.InterfaceContact {
 	return &contactRepo{DB: db}
 }
 
-func (r *contactRepo) GetAll(ctx context.Context) ([]*business.Contact, error) {
+func (r *contactRepo) ContactByCustomerID(ctx context.Context, customerID int) ([]*business.Contact, error) {
 	query :=
 		`SELECT 
 				id,
@@ -25,27 +25,27 @@ func (r *contactRepo) GetAll(ctx context.Context) ([]*business.Contact, error) {
 				email,
 				phone,
 				created_at
-			FROM contact ORDER BY created_at DESC`
+			FROM contact WHERE customer_id = $1 ORDER BY created_at DESC`
 
-	rows, err := r.DB.QueryContext(ctx, query)
-
+	rows, err := r.DB.QueryContext(ctx, query, customerID)
 	if err != nil {
 		log.Println("error al correr el query", err.Error())
 		return nil, err
 	}
+	defer rows.Close()
 
 	contact := make([]*business.Contact, 0)
 
 	for rows.Next() {
 		rc := &business.Contact{}
 		err := rows.Scan(
-			rc.ID,
-			rc.CUSTOMER_ID,
-			rc.NAME,
-			rc.SURNAME,
-			rc.EMAIL,
-			rc.PHONE,
-			rc.CREATED_AT,
+			&rc.ID,
+			&rc.CUSTOMER_ID,
+			&rc.NAME,
+			&rc.SURNAME,
+			&rc.EMAIL,
+			&rc.PHONE,
+			&rc.CREATED_AT,
 		)
 		if err != nil {
 			return nil, err

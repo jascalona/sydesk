@@ -8,7 +8,7 @@ import (
 )
 
 type ContactService interface {
-	GetAll(ctx context.Context) ([]*business.Contact, error)
+	ContactByCustomerID(ctx context.Context, customerID int) ([]*business.Contact, error)
 	Created(ctx context.Context, contact *business.Contact) error
 }
 
@@ -22,8 +22,8 @@ func NewContactService(repo business.InterfaceContact) ContactService {
 	}
 }
 
-func (s *ContactServImpl) GetAll(ctx context.Context) ([]*business.Contact, error) {
-	contact, err := s.Repo.GetAll(ctx)
+func (s *ContactServImpl) ContactByCustomerID(ctx context.Context, customerID int) ([]*business.Contact, error) {
+	contact, err := s.Repo.ContactByCustomerID(ctx, customerID)
 	if err != nil {
 		log.Printf("error al obtener los registros %v")
 		return nil, fmt.Errorf("error al obtener los registros")

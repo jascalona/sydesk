@@ -21,6 +21,6 @@ type ContactValidation struct {
 }
 
 type InterfaceContact interface {
-	GetAll(ctx context.Context) ([]*Contact, error)
+	ContactByCustomerID(ctx context.Context, customerID int) ([]*Contact, error)
 	Created(ctx context.Context, contact *Contact) error
 }
