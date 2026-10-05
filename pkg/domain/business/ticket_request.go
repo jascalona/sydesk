@@ -7,6 +7,7 @@ type TicketRequest struct {
 	AFFECTED_C      string `json:"affected_customer_id" db:"affected_customer_id"`
 	TICKET_BCV      string `json:"ticket_bcv" db:"ticket_bcv"`
 	ENVIROMENT      int    `json:"environment_id" db:"environment_id"`
+	PRODUCT         int    `json:"product_id" db:"product_id"`
 	PRIORITY        int    `json:"priority" db:"priority"`
 	TYPE_REQUEST    int    `json:"type_request" db:"type_request"`
 	SLA_ID          int    `json:"sla_id" db:"sla_id"`
@@ -46,6 +47,7 @@ type ValidateTicketRequest struct {
 	AFFECTED_C      string `json:"affected_customer_id" binding:"required,min=6,max=20"`
 	TICKET_BCV      string `json:"ticket_bcv" binding:"max=6"`
 	ENVIROMENT      int    `json:"environment_id" binding:"required"`
+	PRODUCT         int    `json:"product_id" binding:"required"`
 	PRIORITY        int    `json:"priority" binding:"required,max=100"`
 	TYPE_REQUEST    int    `json:"type_request" binding:"required"`
 	SLA_ID          int    `json:"sla_id" binding:"required"`
@@ -55,7 +57,6 @@ type ValidateTicketRequest struct {
 	TOPIC           string `json:"topic" binding:"required"`
 	DESCRIPTION     string `json:"description" binding:"required"`
 	CREATED_BY      string `json:"created_by" binding:"required,min=6,max=15"`
-	CREATED_AT      string `json:"created_at" binding:"required"`
 	EXPIRED_IN      string `json:"expired_in" binding:"required"`
 }
 

@@ -152,6 +152,7 @@ func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.Ti
 			affected_customer_id,
 			ticket_bcv,
 			environment_id,
+			product_id,
 			priority,
 			type_request,
 			sla_id,
@@ -161,7 +162,6 @@ func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.Ti
 			topic,
 			description,
 			created_by,
-			created_at,
 			expired_in)VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`
 
 	_, err := r.DB.ExecContext(ctx, query,
@@ -169,6 +169,7 @@ func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.Ti
 		new_ticket.AFFECTED_C,
 		new_ticket.TICKET_BCV,
 		new_ticket.ENVIROMENT,
+		new_ticket.PRODUCT,
 		new_ticket.PRIORITY,
 		new_ticket.TYPE_REQUEST,
 		new_ticket.SLA_ID,
@@ -178,7 +179,6 @@ func (r *TicketRequestRepo) Created(ctx context.Context, new_ticket *business.Ti
 		new_ticket.TOPIC,
 		new_ticket.DESCRIPTION,
 		new_ticket.CREATED_BY,
-		new_ticket.CREATED_AT,
 		new_ticket.EXPIRED_IN,
 	)
 	if err != nil {

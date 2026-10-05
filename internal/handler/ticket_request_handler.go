@@ -60,6 +60,7 @@ func (h *TicketRequestHandler) CreatedTicket(c *gin.Context) {
 		AFFECTED_C:      ticket.AFFECTED_C,
 		TICKET_BCV:      ticket.TICKET_BCV,
 		ENVIROMENT:      ticket.ENVIROMENT,
+		PRODUCT:         ticket.PRODUCT,
 		PRIORITY:        ticket.PRIORITY,
 		TYPE_REQUEST:    ticket.TYPE_REQUEST,
 		SLA_ID:          ticket.SLA_ID,
@@ -69,7 +70,6 @@ func (h *TicketRequestHandler) CreatedTicket(c *gin.Context) {
 		TOPIC:           ticket.TOPIC,
 		DESCRIPTION:     ticket.DESCRIPTION,
 		CREATED_BY:      ticket.CREATED_BY,
-		CREATED_AT:      ticket.CREATED_AT,
 		EXPIRED_IN:      ticket.EXPIRED_IN,
 	}
 
