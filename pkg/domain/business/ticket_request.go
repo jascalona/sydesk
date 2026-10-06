@@ -63,6 +63,7 @@ type ValidateTicketRequest struct {
 type InterfaceTicketRequest interface {
 	GetAll(ctx context.Context) ([]*TicketRequest, error)
 	Created(ctx context.Context, new_ticket *TicketRequest) error
+	UpdateByTicketId(ctx context.Context, ticket *TicketRequest) error
 
 	// interfaz dedica al consumo de vistas
 	GetVWTicketRequest(ctx context.Context) ([]*VWTicketRequest, error)

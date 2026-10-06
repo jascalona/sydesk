@@ -76,6 +76,50 @@ func (r *TicketRequestRepo) GetAll(ctx context.Context) ([]*business.TicketReque
 
 }
 
+func (r *TicketRequestRepo) UpdateByTicketId(ctx context.Context, ticket *business.TicketRequest) error {
+	query := `
+		UPDATE ticket_request
+		SET
+			affected_customer_id = $1,
+			ticket_bcv = $2,
+			environment_id = $3,
+			product_id = $4,
+			priority = $5,
+			type_request = $6,
+			sla_id = $7,
+			components_id = $8,
+			subcomponents_id = $9,
+			contact_id = $10,
+			topic = $11,
+			description = $12,
+			created_by = $13,
+			expired_in = $14
+		WHERE id = $15
+	`
+	_, err := r.DB.ExecContext(ctx, query,
+		ticket.AFFECTED_C,
+		ticket.TICKET_BCV,
+		ticket.ENVIROMENT,
+		ticket.PRODUCT,
+		ticket.PRIORITY,
+		ticket.TYPE_REQUEST,
+		ticket.SLA_ID,
+		ticket.COMPONENT_ID,
+		ticket.SUBCOMPONENT_ID,
+		ticket.CONTACT_ID,
+		ticket.TOPIC,
+		ticket.DESCRIPTION,
+		ticket.CREATED_BY,
+		ticket.EXPIRED_IN,
+		ticket.ID,
+	)
+	if err != nil {
+		log.Println("ERROR AL CORRER EL QUERY")
+		return err
+	}
+	return nil
+}
+
 // VW CONSUMER REQUEST
 func (r *TicketRequestRepo) GetVWTicketRequest(ctx context.Context) ([]*business.VWTicketRequest, error) {
 	query := `

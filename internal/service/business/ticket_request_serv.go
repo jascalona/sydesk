@@ -15,6 +15,9 @@ import (
 type TicketRequestServ interface {
 	GetAll(ctx context.Context) ([]*business.TicketRequest, error)
 	Created(ctx context.Context, new_ticket *business.TicketRequest) error
+	UpdateByTicketId(ctx context.Context, ticket *business.TicketRequest) error
+
+	// interfaz dedicada a la vista
 	GetVWTicketRequest(ctx context.Context) ([]*business.VWTicketRequest, error)
 }
 
@@ -47,6 +50,15 @@ func (s *TicketRequestServImpl) GetAll(ctx context.Context) ([]*business.TicketR
 		return nil, fmt.Errorf("Error al obtener los registros")
 	}
 	return ticket, nil
+}
+
+func (s *TicketRequestServImpl) UpdateByTicketId(ctx context.Context, ticket *business.TicketRequest) error {
+	err := s.Repo.UpdateByTicketId(ctx, ticket)
+	if err != nil {
+		log.Println("Error al actualizar el registro: ", err.Error())
+		return fmt.Errorf("Error al actualizar el registro, por favor verifique la traza de la operacion")
+	}
+	return nil
 }
 
 func (s *TicketRequestServImpl) Created(ctx context.Context, new_ticket *business.TicketRequest) error {
