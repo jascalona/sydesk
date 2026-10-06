@@ -12,6 +12,7 @@ import (
 type UserService interface {
 	Create(ctx context.Context, user *domain.User) error
 	GetAll(ctx context.Context) ([]*domain.User, error)
+	GetByDepartamentId(ctx context.Context, departamentId int) ([]*domain.User, error)
 }
 
 type UserServiceImpl struct {
@@ -52,6 +53,15 @@ func (s *UserServiceImpl) Create(ctx context.Context, user *domain.User) error {
 		return fmt.Errorf("no se pudo crear el registro, por favor verifique la traza de la operacion")
 	}
 	return nil
+}
+
+func (s *UserServiceImpl) GetByDepartamentId(ctx context.Context, departamentId int) ([]*domain.User, error) {
+	users, err := s.Repo.GetByDepartamentId(ctx, departamentId)
+	if err != nil {
+		log.Printf("Error al obtener los registros asociados: %v", err)
+		return nil, fmt.Errorf("error al obtener los registros asociados")
+	}
+	return users, nil
 }
 
 func (s *UserServiceImpl) GetAll(ctx context.Context) ([]*domain.User, error) {

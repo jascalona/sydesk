@@ -40,6 +40,45 @@ func (r *userRepo) Create(ctx context.Context, user *domain.User) error {
 	return nil
 }
 
+func (r *userRepo) GetByDepartamentId(ctx context.Context, departamentId int) ([]*domain.User, error) {
+	query := `
+		SELECT
+	      id, alias, name, surname, email, phone, departament_id, role_id, is_active
+		FROM users
+		WHERE departament_id = $1`
+
+	rows, err := r.DB.QueryContext(ctx, query, departamentId)
+	if err != nil {
+		return nil, err
+	}
+
+	users := make([]*domain.User, 0)
+
+	for rows.Next() {
+		user := &domain.User{}
+		err := rows.Scan(
+			&user.ID,
+			&user.ALIAS,
+			&user.NAME,
+			&user.SURNAME,
+			&user.EMAIL,
+			&user.PHONE,
+			&user.DEPARTAMENT_ID,
+			&user.ROLE_ID,
+			&user.IS_ACTIVE,
+		)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
 func (r *userRepo) GetAll(ctx context.Context) ([]*domain.User, error) {
 	query := `
 		SELECT
@@ -72,10 +111,8 @@ func (r *userRepo) GetAll(ctx context.Context) ([]*domain.User, error) {
 		users = append(users, user)
 	}
 
-	// validation error
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-	//return list data
 	return users, nil
 }

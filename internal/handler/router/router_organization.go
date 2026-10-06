@@ -29,6 +29,11 @@ func (r *RouterOrganization) RegisterOrganization(rg *gin.RouterGroup) {
 		users.POST("", r.users_h.CreateUser)
 	}
 
+	userByDpt := users.Group("usrbydpt")
+	{
+		userByDpt.GET("", r.users_h.GetByDepartamentId)
+	}
+
 	roles := rg.Group("roles")
 	{
 		roles.GET("", r.roles_h.GetRoles)

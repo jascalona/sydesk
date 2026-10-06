@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"sydesk/internal/service/organization"
 	domain "sydesk/pkg/domain/organization"
 	"sydesk/pkg/utils"
@@ -60,6 +61,24 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 
 func (h *UserHandler) GetAllUsers(c *gin.Context) {
 	users, err := h.Service.GetAll(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}
+
+func (h *UserHandler) GetByDepartamentId(c *gin.Context) {
+	users_dpt := c.Query("id_dpt")
+
+	users_id, err := strconv.Atoi(users_dpt)
+	if err != nil {
+		log.Println("Error, el ID debe ser un número válido")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "el ID debe ser un número válido"})
+		return
+	}
+
+	users, err := h.Service.GetByDepartamentId(c.Request.Context(), users_id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

@@ -33,5 +33,6 @@ type ValidationUser struct {
 
 type UserRepo interface {
 	GetAll(ctx context.Context) ([]*User, error)
+	GetByDepartamentId(ctx context.Context, departamentId int) ([]*User, error)
 	Create(ctx context.Context, users *User) error
 }
