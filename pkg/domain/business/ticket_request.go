@@ -44,7 +44,7 @@ type VWTicketRequest struct {
 
 type ValidateTicketRequest struct {
 	//ID              string `json:"id" binding:"required, min=13,max=13"`
-	AFFECTED_C      string `json:"affected_customer_id" binding:"required,min=6,max=20"`
+	AFFECTED_C      string `json:"affected_customer_id" binding:"required,min=4,max=20"`
 	TICKET_BCV      string `json:"ticket_bcv" binding:"max=6"`
 	ENVIROMENT      int    `json:"environment_id" binding:"required"`
 	PRODUCT         int    `json:"product_id" binding:"required"`
