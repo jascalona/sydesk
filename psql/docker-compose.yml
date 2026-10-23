@@ -7,36 +7,35 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
-      #- POSTGRES_DB=helpdesk
+      - POSTGRES_DB=sydesk
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      #- ./helpdesk_03_02_26.sql:/tmp/backup.dump
+      - ./backup_22_10_26.sql:/docker-entrypoint-initdb.d/backup.sql
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d helpdesk"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d sydesk"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 60s
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_gui
-    restart: unless-stopped
-    environment:
-      PGADMIN_DEFAULT_EMAIL: mantequilla@sycom.com.ve
-      PGADMIN_DEFAULT_PASSWORD: root
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    ports:
-      - "5050:80"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    depends_on:
-      db:
-        condition: service_healthy
+  #pgadmin:
+  #  image: dpage/pgadmin4
+  #  container_name: pgadmin_gui
+  #  restart: unless-stopped
+  #  environment:
+  #    PGADMIN_DEFAULT_EMAIL: mantequilla@sycom.com.ve
+  #    PGADMIN_DEFAULT_PASSWORD: root
+  #    PGADMIN_CONFIG_SERVER_MODE: 'False'
+  #  ports:
+  #    - "5050:80"
+  #  volumes:
+  #    - pgadmin_data:/var/lib/pgadmin
+  #  depends_on:
+  #    db:
+  #      condition: service_healthy
 
 volumes:
   postgres_data:
-  pgadmin_data:
-
+  #pgadmin_data:
