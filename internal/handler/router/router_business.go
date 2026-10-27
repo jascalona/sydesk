@@ -64,6 +64,7 @@ func (r *RouterBusiness) RegisterBusiness(rg *gin.RouterGroup) {
 	{
 		task_request.POST("", r.task_h.CreatedRequestTask)
 		task_request.GET("", r.task_h.GetVWTaskRequest)
+		task_request.PUT("/:id", r.task_h.UpdateRequestTask)
 	}
 
 	task_by_ticket := rg.Group("taskbyticket")

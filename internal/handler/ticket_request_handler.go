@@ -117,7 +117,7 @@ func (h *TicketRequestHandler) UpdateTicket(c *gin.Context) {
 			c.JSON(http.StatusConflict, gin.H{"error de formato": errors})
 			return
 		}
-		log.Println("Error en JSON: ", err.Error())
+		log.Println("Error en el JSON: ", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "json mal formado"})
 		return
 	}
@@ -149,7 +149,7 @@ func (h *TicketRequestHandler) UpdateTicket(c *gin.Context) {
 	// Llamamos a la función pasando SOLO los 2 argumentos que espera la interfaz
 	if err := h.Service.UpdateByTicketId(c.Request.Context(), &updateTicket); err != nil {
 		log.Println("Error al actualizar el registro: ", err.Error())
-		log.Println("MSJ COMPLETO: %s", &updateTicket)
+		log.Printf("MSJ COMPLETO: %s", &updateTicket)
 		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 		return
 	}

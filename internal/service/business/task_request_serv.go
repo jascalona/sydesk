@@ -16,6 +16,7 @@ type TaskRequestServ interface {
 	CreatedRequestTask(ctx context.Context, task *business.TaskRequest) error
 	GetVWTaskRequest(ctx context.Context) ([]*business.VWTaskRequest, error)
 	GetVWTaskRequestByTicket(ctx context.Context, ticket_id string) ([]*business.VWTaskRequest, error)
+	UpdateRequestTask(ctx context.Context, task *business.TaskRequest) error
 }
 
 type TaskRequestImpl struct {
@@ -39,6 +40,15 @@ func (s *TaskRequestImpl) GetVWTaskRequest(ctx context.Context) ([]*business.VWT
 	}
 	return vw_task, nil
 
+}
+
+func (s *TaskRequestImpl) UpdateRequestTask(ctx context.Context, task *business.TaskRequest) error {
+	err := s.Repo.UpdateRequestTask(ctx, task)
+	if err != nil {
+		log.Println("Error al actualizar el registro: ", err.Error())
+		return fmt.Errorf("Error al actualizar el registro, por favor verifique la traza de la operacion")
+	}
+	return nil
 }
 
 func (s *TaskRequestImpl) GetVWTaskRequestByTicket(ctx context.Context, ticket_id string) ([]*business.VWTaskRequest, error) {

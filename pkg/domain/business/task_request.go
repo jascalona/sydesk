@@ -35,18 +35,19 @@ type VWTaskRequest struct {
 type ValidateRequestTask struct {
 	TICKET_ID     string  `json:"ticket_id" binding:"required,max=13,min=13"`
 	PRIORITY      int     `json:"priority_id" binding:"required"`
-	STATUS_ID     int     `json:"status_id" bindign:"required"`
-	CREATED_BY    string  `json:"created_by" bindign:"required,max=15"`
-	ASSIGNED_DPT  int     `json:"assigned_departament" bindign:"required"`
-	ASSIGNED_USER string  `json:"assigned_user" bindign:"required,max=15"`
-	TOPIC         string  `json:"topic" bindign:"required"`
-	DESCRIPTION   string  `json:"description" bindign:"required"`
+	STATUS_ID     int     `json:"status_id" binding:"required"`
+	CREATED_BY    string  `json:"created_by" binding:"required,max=15"`
+	ASSIGNED_DPT  int     `json:"assigned_departament" binding:"required"`
+	ASSIGNED_USER string  `json:"assigned_user" binding:"required,max=15"`
+	TOPIC         string  `json:"topic" binding:"required"`
+	DESCRIPTION   string  `json:"description" binding:"required"`
 	EXPIRED_IN    string  `json:"expired_in" db:"expired_in"`
-	CLOSED_IN     *string `json:"closed_in" bindign:"omitempty"`
+	CLOSED_IN     *string `json:"closed_in" binding:"omitempty"`
 }
 
 type InterfaceTaskRequest interface {
 	CreatedRequestTask(ctx context.Context, task *TaskRequest) error
 	GetVWTaskRequest(ctx context.Context) ([]*VWTaskRequest, error)
 	GetVWTaskRequestByTicket(ctx context.Context, ticket_id string) ([]*VWTaskRequest, error)
+	UpdateRequestTask(ctx context.Context, task *TaskRequest) error
 }

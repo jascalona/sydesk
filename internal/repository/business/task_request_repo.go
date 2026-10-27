@@ -116,6 +116,41 @@ func (r *TaskRequestRepo) GetVWTaskRequest(ctx context.Context) ([]*business.VWT
 
 }
 
+func (r *TaskRequestRepo) UpdateRequestTask(ctx context.Context, task *business.TaskRequest) error {
+	query := `
+		UPDATE task_request SET
+			ticket_id = $1,
+			topic = $2,
+			expired_in = $3,
+			description = $4,
+			priority_id = $5,
+			status_id = $6,
+			created_by = $7,
+			assigned_departament = $8,
+			assigned_user = $9
+		WHERE id = $10`
+
+	_, err := r.DB.ExecContext(ctx, query,
+		task.TICKET_ID,
+		task.TOPIC,
+		task.EXPIRED_IN,
+		task.DESCRIPTION,
+		task.PRIORITY,
+		task.STATUS_ID,
+		task.CREATED_BY,
+		task.ASSIGNED_DPT,
+		task.ASSIGNED_USER,
+		task.ID,
+	)
+
+	if err != nil {
+		log.Printf("Error al correr el query: %v", err.Error())
+		return err
+	}
+	return nil
+
+}
+
 // RETORNO DE VSITAS POR TICKET_ID
 func (r *TaskRequestRepo) GetVWTaskRequestByTicket(ctx context.Context, ticket_id string) ([]*business.VWTaskRequest, error) {
 
