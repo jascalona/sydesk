@@ -10,7 +10,7 @@ services:
       - POSTGRES_DB=sydesk
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backup_22_10_26.sql:/docker-entrypoint-initdb.d/backup.sql
+      #- ./backup_22_10_26.sql:/docker-entrypoint-initdb.d/backup.sql
     ports:
       - "5432:5432"
     healthcheck:

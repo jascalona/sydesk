@@ -23,6 +23,7 @@ func (h *ProductHandler) GetAllProduct(c *gin.Context) {
 	if err != nil {
 		logger.Errorf("Error en el servicio GET product %v", err.Error())
 		c.JSON(http.StatusInternalServerError, err)
+		return
 	}
 	c.JSON(http.StatusOK, product)
 }

@@ -58,6 +58,7 @@ func main() {
 	tyrequest := repoCom.NewTypeRequestRepo(dbConn)
 	priorityRepo := repoCom.NewPriorityRepo(dbConn)
 	departamentRepo := repoCom.NewDepartamentRepo(dbConn)
+	slaRepo := repoCom.NewSLARepo(dbConn)
 
 	// AUDITORIA
 	auditRepo := repoAudit.NewAuditRepo(dbConn)
@@ -91,6 +92,7 @@ func main() {
 	tyrequestService := servComp.NewTypeRequestService(tyrequest)
 	priorityServ := servComp.NewPriorityServ(priorityRepo)
 	departamentServ := servComp.NewDepartamentService(departamentRepo)
+	slaServ := servComp.NewSLAService(slaRepo)
 
 	// GRUPO DE NEGOCIO
 	customerService := servBus.NewCustomerServ(customerRepo)
@@ -132,6 +134,7 @@ func main() {
 	tyrequestHandler := handler.NewTypeRequestHandler(tyrequestService)
 	priorityHandler := handler.NewPriorityHandler(priorityServ)
 	departamentHandler := handler.NewDepartamentHandler(departamentServ)
+	slaHandler := handler.NewSLAHandler(slaServ)
 
 	// GRUPO DE NEGOCIO
 	customerHandler := handler.NewCustomerHandler(customerService)
@@ -162,6 +165,7 @@ func main() {
 		tyrequestHandler,
 		priorityHandler,
 		departamentHandler,
+		slaHandler,
 	)
 
 	orgRouter := router.NewRouterOrganization(userHandler, rolesHandler)

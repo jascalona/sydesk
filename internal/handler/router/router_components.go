@@ -18,6 +18,8 @@ type RouterComponent struct {
 	tyrequest_h             *handler.TypeRequestHandler
 	priority_h              *handler.PriorityHandler
 	departament_h           *handler.DepartamentHandler
+	sla_h                   *handler.SLAHandler
+
 	//priority_h *handler.P
 }
 
@@ -33,6 +35,7 @@ func NewRouterComponent(
 	tyrequest *handler.TypeRequestHandler,
 	priority *handler.PriorityHandler,
 	departament *handler.DepartamentHandler,
+	sla *handler.SLAHandler,
 ) *RouterComponent {
 	return &RouterComponent{
 		component_h:             component,
@@ -45,6 +48,7 @@ func NewRouterComponent(
 		tyrequest_h:             tyrequest,
 		priority_h:              priority,
 		departament_h:           departament,
+		sla_h:                   sla,
 	}
 }
 
@@ -107,4 +111,8 @@ func (r *RouterComponent) RegisterComponents(rg *gin.RouterGroup) {
 		departament.GET("", r.departament_h.GetAll)
 	}
 
+	sla := rg.Group("sla")
+	{
+		sla.GET("", r.sla_h.GetAllSLA)
+	}
 }
