@@ -197,7 +197,9 @@ func (r *TaskRequestRepo) GetVWTaskRequestByTicket(ctx context.Context, ticket_i
 			log.Println("Error al aplicar el escanner")
 			return nil, err
 		}
-
+		if err := rows.Err(); err != nil {
+			return nil, err
+		}
 		rows_task = append(rows_task, list)
 	}
 

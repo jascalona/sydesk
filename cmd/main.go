@@ -73,6 +73,7 @@ func main() {
 	ticket := repoBus.NewTicketRequest(dbConn)
 	ticketBreak := repoBus.NewTicketBreakRepo(dbConn)
 	taskRequest := repoBus.NewTaskRequestRepo(dbConn)
+	notesRepo := repoBus.NewNotesRepo(dbConn)
 
 	// =========================================================================
 	// INYECCIÓN DE DEPENDENCIAS (CAPA DE NEGOCIO -> SERVICIOS)
@@ -100,6 +101,7 @@ func main() {
 	ticketService := servBus.NewTicketRequestServ(ticket)
 	ticketBreakService := servBus.NewTicketBreakServ(ticketBreak)
 	taskRequestService := servBus.NewTaskRequestServ(taskRequest)
+	notesService := servBus.NewNotesService(notesRepo)
 
 	// GRUPO DE AUDITORIA
 	auditService := servAudit.NewAuditServ(auditRepo)
@@ -142,6 +144,7 @@ func main() {
 	ticketHandler := handler.NewTicketRequestHandler(ticketService)
 	ticketBreakHandler := handler.NewTicketBreakHandler(ticketBreakService)
 	taskRequestHandler := handler.NewTaskRequestHandler(taskRequestService)
+	notesHandler := handler.NewNotesHandler(notesService)
 
 	// grupo de auditoria
 	auditHandler := handler.NewAuditHandler(auditService)
@@ -176,6 +179,7 @@ func main() {
 		ticketHandler,
 		ticketBreakHandler,
 		taskRequestHandler,
+		notesHandler,
 	)
 
 	auditRouter := router.NewRouterAudit(

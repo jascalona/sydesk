@@ -13,7 +13,8 @@ type RouterBusiness struct {
 	ticket_h   *handler.TicketRequestHandler
 	ticket_b_h *handler.TicketBreakHandler
 
-	task_h *handler.TaskRequestHandler
+	task_h  *handler.TaskRequestHandler
+	notes_h *handler.NotesHandler
 }
 
 func NewRouterBusiness(
@@ -22,6 +23,7 @@ func NewRouterBusiness(
 	ticket *handler.TicketRequestHandler,
 	ticketBreak *handler.TicketBreakHandler,
 	taskRequest *handler.TaskRequestHandler,
+	notes *handler.NotesHandler,
 ) *RouterBusiness {
 	return &RouterBusiness{
 		customer_h: customer,
@@ -29,6 +31,7 @@ func NewRouterBusiness(
 		ticket_h:   ticket,
 		ticket_b_h: ticketBreak,
 		task_h:     taskRequest,
+		notes_h:    notes,
 	}
 }
 
@@ -70,6 +73,12 @@ func (r *RouterBusiness) RegisterBusiness(rg *gin.RouterGroup) {
 	task_by_ticket := rg.Group("taskbyticket")
 	{
 		task_by_ticket.GET("", r.task_h.GetVWTaskRequestByTicket)
+	}
+
+	notes := rg.Group("notes")
+	{
+		notes.POST("", r.notes_h.CreatedNotes)
+		notes.GET("", r.notes_h.GetByTaskId)
 	}
 
 }
