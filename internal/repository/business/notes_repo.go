@@ -17,23 +17,26 @@ func NewNotesRepo(db *sql.DB) business.InterfaceNotes {
 
 func (r *NotesRepo) GetByTaskId(ctx context.Context, task_id string) ([]*business.Notes, error) {
 	query := `
-		SELECT 
-			id,
-			task_id,
-			topic,
-			description,
-			created_by,
-			created_at
-		FROM notes
-		WHERE task_id = $1 order by created_at desc`
+        SELECT 
+            id,
+            task_id,
+            topic,
+            description,
+            created_by,
+            created_at,
+            update_at
+        FROM notes
+        WHERE task_id = $1 ORDER BY created_at DESC`
 
 	rows, err := r.DB.QueryContext(ctx, query, task_id)
 	if err != nil {
 		log.Print("Error al correr el query: ", err.Error())
 		return nil, err
 	}
+	defer rows.Close()
 
-	var notes_by_task []*business.Notes
+	notes_by_task := []*business.Notes{}
+
 	for rows.Next() {
 		list := &business.Notes{}
 		if err := rows.Scan(
@@ -43,15 +46,18 @@ func (r *NotesRepo) GetByTaskId(ctx context.Context, task_id string) ([]*busines
 			&list.DESCRIPTION,
 			&list.CREATED_BY,
 			&list.CREATED_AT,
+			&list.UPDATE_AT,
 		); err != nil {
 			log.Print("Error al escanear los registros: ", err.Error())
 			return nil, err
 		}
 		notes_by_task = append(notes_by_task, list)
 	}
+
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
+
 	return notes_by_task, nil
 }
 
@@ -62,7 +68,8 @@ func (r *NotesRepo) UpdateNotes(ctx context.Context, note_id *business.Notes) er
 			task_id = $1,
 			topic = $2,
 			description = $3,
-			created_by = $4
+			created_by = $4,
+			update_at = CURRENT_TIMESTAMP
 		WHERE id = $5`
 
 	_, err := r.DB.ExecContext(ctx, query,

@@ -10,6 +10,7 @@ type Notes struct {
 	DESCRIPTION string  `json:"description" db:"description"`
 	CREATED_BY  string  `json:"created_by" db:"created_by"`
 	CREATED_AT  *string `json:"created_at" db:"created_at"`
+	UPDATE_AT   *string `json:"update_at" db:"update_at"`
 }
 
 type ValidateNotes struct {
