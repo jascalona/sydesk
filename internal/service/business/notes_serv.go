@@ -10,6 +10,7 @@ import (
 type NotesService interface {
 	GetByTaskId(ctx context.Context, task_id string) ([]*business.Notes, error)
 	CreatedNotes(ctx context.Context, notes *business.Notes) error
+	UpdateNotes(ctx context.Context, note_id *business.Notes) error
 }
 
 type NotesServiceImpl struct {
@@ -32,6 +33,15 @@ func (s *NotesServiceImpl) GetByTaskId(ctx context.Context, task_id string) ([]*
 		return nil, fmt.Errorf("Error al obtener los registros: %v", err.Error())
 	}
 	return rows_notes, nil
+}
+
+func (s *NotesServiceImpl) UpdateNotes(ctx context.Context, note_id *business.Notes) error {
+	err := s.Repo.UpdateNotes(ctx, note_id)
+	if err != nil {
+		log.Println("Error al actualizar el registro: ", err.Error())
+		return fmt.Errorf("Error al actualizar el registro, por favor verifique la traza de la operacion")
+	}
+	return nil
 }
 
 func (s *NotesServiceImpl) CreatedNotes(ctx context.Context, notes *business.Notes) error {

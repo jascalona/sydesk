@@ -55,6 +55,32 @@ func (r *NotesRepo) GetByTaskId(ctx context.Context, task_id string) ([]*busines
 	return notes_by_task, nil
 }
 
+func (r *NotesRepo) UpdateNotes(ctx context.Context, note_id *business.Notes) error {
+
+	query := `
+		UPDATE notes SET 
+			task_id = $1,
+			topic = $2,
+			description = $3,
+			created_by = $4
+		WHERE id = $5`
+
+	_, err := r.DB.ExecContext(ctx, query,
+		note_id.TASK_ID,
+		note_id.TOPIC,
+		note_id.DESCRIPTION,
+		note_id.CREATED_BY,
+		note_id.ID,
+	)
+
+	if err != nil {
+		log.Printf("Error al correr el query: %w", err.Error())
+		return err
+	}
+
+	return nil
+}
+
 func (r *NotesRepo) CreatedNotes(ctx context.Context, notes *business.Notes) error {
 
 	query := `INSERT INTO notes (

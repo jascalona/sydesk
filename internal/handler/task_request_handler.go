@@ -100,7 +100,7 @@ func (h *TaskRequestHandler) UpdateRequestTask(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error interno": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, "Solicitud actualizada")
+	c.JSON(http.StatusOK, "Solicitud Procesada")
 }
 
 func (h *TaskRequestHandler) CreatedRequestTask(c *gin.Context) {

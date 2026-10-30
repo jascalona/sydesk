@@ -3,6 +3,8 @@ package handler
 import (
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 	"sydesk/internal/service/business"
 
 	domain "sydesk/pkg/domain/business"
@@ -36,6 +38,49 @@ func (h *NotesHandler) GetByTaskId(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, taskById)
+}
+
+func (h *NotesHandler) UpdateNotes(c *gin.Context) {
+	idParam := strings.TrimSpace(c.Param("id"))
+
+	// validacion y conversion
+	noteId, err := strconv.Atoi(idParam)
+	if err != nil || noteId <= 0 {
+		log.Printf("El ID no es valido: %s", idParam)
+		c.JSON(http.StatusBadRequest, gin.H{"Error": "El ID debe ser un numero valido"})
+		return
+	}
+
+	var note domain.ValidateNotes
+	if err := c.ShouldBindJSON(&note); err != nil {
+		errors := utils.GetValidationError(err)
+		if errors != nil {
+			log.Println("Error en la validacion del mensaje: ", err.Error())
+			c.JSON(http.StatusConflict, gin.H{"error de formato: ": errors})
+			return
+		}
+		log.Println("Error en el JSON", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "json mal formado"})
+		return
+	}
+
+	validation_notes := domain.Notes{
+		ID:          noteId,
+		TASK_ID:     note.TASK_ID,
+		TOPIC:       note.TOPIC,
+		DESCRIPTION: note.DESCRIPTION,
+		CREATED_BY:  note.CREATED_BY,
+	}
+
+	if err := h.Service.UpdateNotes(c.Request.Context(), &validation_notes); err != nil {
+		log.Println("Error al actualizar el registro: ", err.Error())
+		log.Printf("MSJ COMPLETO: %+v", validation_notes)
+		c.JSON(http.StatusInternalServerError, gin.H{"Error interno: ": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, "Solicitud Procesada")
+
 }
 
 func (h *NotesHandler) CreatedNotes(c *gin.Context) {

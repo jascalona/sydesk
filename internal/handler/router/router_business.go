@@ -79,6 +79,7 @@ func (r *RouterBusiness) RegisterBusiness(rg *gin.RouterGroup) {
 	{
 		notes.POST("", r.notes_h.CreatedNotes)
 		notes.GET("", r.notes_h.GetByTaskId)
+		notes.PUT("/:id", r.notes_h.UpdateNotes)
 	}
 
 }

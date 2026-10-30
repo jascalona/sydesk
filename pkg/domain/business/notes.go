@@ -22,4 +22,5 @@ type ValidateNotes struct {
 type InterfaceNotes interface {
 	GetByTaskId(ctx context.Context, task_id string) ([]*Notes, error)
 	CreatedNotes(ctx context.Context, notes *Notes) error
+	UpdateNotes(ctx context.Context, note_id *Notes) error
 }
