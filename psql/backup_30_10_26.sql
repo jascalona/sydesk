@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict mKZcBdBxtVvV3bk4VkpveXUhWRQtydvAvxQKZuxvqGf2N5e2ofSfJqI22o2r7rg
+\restrict fawbEL1nbkCBVtSTNFIygGCoAeF9snInBNv8903b5roOlYvpbFeb4GrAftCN7qs
 
--- Dumped from database version 17.10
--- Dumped by pg_dump version 17.10
+-- Dumped from database version 17.11
+-- Dumped by pg_dump version 17.11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -342,6 +342,7 @@ CREATE TABLE public.notes (
     description text,
     created_by character varying(15),
     created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    update_at timestamp without time zone,
     CONSTRAINT fk_validation_null_task_ticket CHECK ((((ticket_id IS NOT NULL) AND (task_id IS NULL)) OR ((ticket_id IS NULL) AND (task_id IS NOT NULL))))
 );
 
@@ -954,6 +955,7 @@ COPY public.collectives (id, group_id, user_id, created_at) FROM stdin;
 
 COPY public.components (id, name, product_id, description, is_active, created_at) FROM stdin;
 1	MongoDB	1	Base de datos MongoDB producto sypago	t	2026-04-22 14:43:12.711699
+4	Kafka	1	Broker de kafka	t	2026-10-27 13:41:40.5297
 \.
 
 
@@ -1017,6 +1019,7 @@ COPY public.customers (id, rif, name, channel, ws_group, uid_sypago, created_at)
 
 COPY public.departament (id, name, is_active, created_at) FROM stdin;
 3	QA	t	2026-05-22 19:31:48.654399
+4	Infrestructura	t	2026-10-27 18:28:23.345441
 \.
 
 
@@ -1049,7 +1052,8 @@ COPY public.item_activities (id, product_id, name, created_at) FROM stdin;
 -- Data for Name: notes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.notes (id, ticket_id, task_id, topic, description, created_by, created_at) FROM stdin;
+COPY public.notes (id, ticket_id, task_id, topic, description, created_by, created_at, update_at) FROM stdin;
+12	\N	8872ST	ACTUALIZACION DEL TICKET (TEST)	PRUEBA DE NOTA	V123456789	2026-10-30 19:20:21.827271	\N
 \.
 
 
@@ -1141,6 +1145,7 @@ COPY public.roles (id, name, created_at) FROM stdin;
 
 COPY public.sla (id, name, unit_time_id, amount, created_at) FROM stdin;
 1	Test de sla	1	1	2026-06-12 15:09:44.431454
+2	Test 2 de sla	2	1	2026-10-27 13:32:55.446849
 \.
 
 
@@ -1162,6 +1167,7 @@ COPY public.status (id, name, created_at) FROM stdin;
 
 COPY public.subcomponents (id, name, components_id, description, is_active, created_at) FROM stdin;
 1	Daemon MongoDB	1	demonio de mongo	t	2026-06-12 15:11:07.488876
+2	Topicos de Credito	4	Topicos de credito consumido por los MS	t	2026-10-27 13:42:32.161833
 \.
 
 
@@ -1190,10 +1196,21 @@ COPY public.task_break (id, task_id, status_paused, start_at, end_at) FROM stdin
 
 COPY public.task_request (id, ticket_id, priority_id, status_id, created_by, assigned_departament, assigned_user, topic, description, created_at, expired_in, closed_in) FROM stdin;
 AA2S80	9BA64C0165C46	7	2	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-08-20 15:09:22.667765	2026-08-22 20:19:34.832369	\N
-4A1T47	0C6665C202C18	7	2	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-08-20 15:11:31.58116	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
 4AS19T	9BA64C0165C46	7	2	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-05 20:26:04.37249	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
-AKT604	351C1BC690BC6	7	2	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-05 20:26:27.843145	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
-6A04S9	351C1BC690BC6	6	1	V123456789	3	V123456789	Inyeccion de Tarea	Inyeccion de Tarea	2026-10-06 13:23:13.913838	2026-10-07 00:00:00	2026-10-07 00:00:00
+AKT604	351C1BC690BC6	7	2	V30221960	3	V30221960	Actualizacion sypago	Actualizacion  Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-05 20:26:27.843145	2026-10-27 20:19:34.832369	2026-08-22 20:19:34.832369
+6A04S9	351C1BC690BC6	7	2	V30221960	3	V30221960	Actualizacion sypago	Actualizacion  Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-06 13:23:13.913838	2026-10-27 20:19:34.832369	2026-10-07 00:00:00
+ASS171	351C1BC690BC6	7	2	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-27 18:21:39.220251	2026-08-22 20:19:34.832369	\N
+133064	351C1BC690BC6	7	1	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-27 18:22:09.465688	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
+4A1T47	0C6665C202C18	7	2	V30221960	3	V123456789	Respaldo de la BD Actualizacion de la tarea	Actualizacion de la tarea	2026-08-20 15:11:31.58116	2026-08-27 20:19:34.832369	2026-08-22 20:19:34.832369
+62546S	351C1BC690BC6	7	1	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-27 18:22:23.552396	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
+KAAK8K	351C1BC690BC6	7	1	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-27 18:22:48.813277	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
+1KTA09	351C1BC690BC6	7	1	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-27 18:25:04.402418	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
+05A98A	351C1BC690BC6	7	4	V30221960	3	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-27 18:27:43.305494	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
+491K9K	351C1BC690BC6	7	4	V30221960	4	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-27 18:28:35.460327	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
+566358	351C1BC690BC6	7	4	V30221960	4	V30221960	Respaldo de la BD sypago	Intervencion de infrestructura para realizar el backup de postgres-sypago	2026-10-27 18:29:06.471108	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
+5007A5	351C1BC690BC6	7	4	V123456789	4	V123456789	ACTUALIZACION DESDE LA WEB	ACTUALIZACION DESDE LA WEB	2026-10-27 14:14:09.80945	2026-10-28 00:00:00	2026-10-28 00:00:00
+8872ST	351C1BC690BC6	5	1	V30221960	4	V123456789	ACTUALIZACION DESDE LA WEB 5	ACTUALIZACION DESDE LA WEB 5	2026-10-27 18:29:07.462455	2026-08-22 20:19:34.832369	2026-08-22 20:19:34.832369
+609408	351C1BC690BC6	5	1	V123456789	3	V30221960	CREACION DE UNA TAREAS	CREACION DE  UNA TAREA	2026-10-30 17:19:43.87159	2026-10-30 00:00:00	2026-10-30 00:00:00
 \.
 
 
@@ -1216,7 +1233,6 @@ COPY public.ticket_break (id, ticket_id, start_at, end_at, status_paused, create
 --
 
 COPY public.ticket_request (id, affected_customer_id, ticket_bcv, sla_id, components_id, subcomponents_id, contact_id, topic, description, created_by, priority, product_id, environment_id, type_request, created_at, expired_in) FROM stdin;
-351C1BC690BC6	J00297011	111111	1	1	1	1	ACTUALIZACION DEL TICKET	Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum.	V123456789	7	1	2	1	2026-10-05 20:21:35.487321	2026-09-16 19:28:34.157252
 9BA64C0165C46	J123456987	101010	1	1	1	1	ASUNTO DEL TICKET	Descripcion	V30221960	5	1	1	1	2026-08-24 18:49:58.939157	2026-08-25 18:49:58.939157
 0C6665C202C18	J123456987	101010	1	1	1	1	ASUNTO DEL TICKET	Descripcion	V30221960	5	1	1	1	2026-08-24 18:49:58.939157	2026-08-25 18:49:58.939157
 7A30933133A95	J123456987		1	1	1	1	ASUNTO DEL TICKET	Descripcion	V30221960	5	1	1	1	2026-08-24 18:49:58.939157	2026-08-25 18:49:58.939157
@@ -1234,6 +1250,7 @@ C77CC637C79AC	J301083350	987654	1	1	1	1	REVISION DEL SERVIDOR DE KAFKA	Descripci
 AB83AC353D8C5	Q123456789	999999	1	1	1	\N	Inyeccion de Ticket 2	\nWhat is Lorem Ipsum?\nLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since 1966, when designers at Letraset and James Mosley, the librarian at St Bride Printing Library in London, took a 1914 Cicero translation and scrambled it to make dummy text for Letraset's Body Type sheets. It has survived not only many decades, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised thanks to these sheets and more recently with desktop publishing software like Aldus PageMaker and Microsoft Word including versions of Lorem Ipsum.\n\nWhy do we use it?\nIt is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).\n\n\nWhere does it come from?\nContrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.\n\nThe standard chunk of Lorem Ipsum used since 1966 is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.	V123456789	7	1	3	1	2026-10-05 20:05:20.487559	2026-10-14 00:00:00
 24824275AD3C9	Q123456789	987653	1	1	1	\N	Inyeccion de Ticket 3	hola mundo	V123456789	7	1	3	1	2026-10-05 20:08:46.095776	2026-10-06 00:00:00
 344D3CB611911	Q123456789	987658	1	1	1	\N	Inyeccion de Ticket 4	import React, { useState, useEffect } from 'react';\nimport { Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';\nimport { X } from 'lucide-react';\nimport { SelectAsync } from '../input/SelectAsync';\nimport { apiClient } from '../../middleware/ApiClient';\nimport { useAuth } from '../../middleware/AuthContext';\n\n// Helper para decodificar el payload del token JWT\nconst parseJwt = (token: string | null) => {\n  if (!token) return null;\n  try {\n    const base64Url = token.split('.')[1];\n    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');\n    const jsonPayload = decodeURIComponent(\n      window.atob(base64)\n        .split('')\n        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))\n        .join('')\n    );\n    return JSON.parse(jsonPayload);\n  } catch {\n    return null;\n  }\n};\n\nconst initialFormState = {\n  topic: '',\n  ticket_bcv: '',\n  product_id: '',\n  affected_customer_id: '',\n  contact_id: '',\n  component_id: '',\n  subcomponent_id: '',\n  environment_id: '',\n  type_request_id: '',\n  priority_id: '',\n  description: '',\n  created_by: '',\n  expired_in: ''\n};\n\ninterface ModalNewTicketProps {\n  open: boolean;\n  onClose: () => void;\n  onSubmitSuccess?: () => void;\n}\n\nexport default function ModalNewTicket({ open, onClose, onSubmitSuccess }: ModalNewTicketProps): React.ReactElement {\n  const { token } = useAuth();\n  const [formData, setFormData] = useState(initialFormState);\n  const [submitting, setSubmitting] = useState(false);\n  // Mapa interno para relacionar id -> rif\n  const [customerRifMap, setCustomerRifMap] = useState<Record<string | number, string>>({});\n\n  // Obtener el identificador del usuario desde el JWT\n  const decodedUser = parseJwt(token);\n  const currentUserId = decodedUser?.sub || decodedUser?.username || decodedUser?.id || decodedUser?.user_id || '';\n\n  // 1. Obtener la lista de clientes para armar la equivalencia ID -> RIF al abrir el modal\n  useEffect(() => {\n    if (open) {\n      setFormData((prev) => ({\n        ...prev,\n        created_by: currentUserId\n      }));\n\n      const fetchCustomerRifs = async () => {\n        try {\n          const response = await apiClient('/business/customers');\n          const list = Array.isArray(response) ? response : response?.data || [];\n          const map: Record<string | number, string> = {};\n          \n          list.forEach((c: { id: string | number; rif: string }) => {\n            if (c.id && c.rif) {\n              map[c.id] = c.rif;\n            }\n          });\n          \n          setCustomerRifMap(map);\n        } catch (error) {\n          console.error('Error al cargar clientes para mapa RIF:', error);\n        }\n      };\n\n      fetchCustomerRifs();\n    }\n  }, [open, currentUserId]);\n\n  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {\n    const { name, value } = e.target;\n\n    setFormData((prev) => {\n      const newState = { ...prev, [name]: value };\n\n      if (name === 'affected_customer_id') {\n        newState.contact_id = '';\n      }\n\n      return newState;\n    });\n  };\n\n  const handleClose = () => {\n    setFormData(initialFormState);\n    onClose();\n  };\n\n  const handleSubmit = async (e: React.FormEvent) => {\n    e.preventDefault();\n    setSubmitting(true);\n\n    // Formatear la fecha de vencimiento a ISO 8601 UTC completo\n    let formattedExpiredIn = new Date().toISOString();\n    if (formData.expired_in) {\n      const parsedDate = new Date(formData.expired_in);\n      if (!isNaN(parsedDate.getTime())) {\n        formattedExpiredIn = parsedDate.toISOString();\n      }\n    }\n\n    // Traducir el ID numérico seleccionado a su RIF\n    const selectedId = formData.affected_customer_id;\n    const resolvedRif = customerRifMap[selectedId] || String(selectedId || '').trim();\n\n    const payload = {\n      affected_customer_id: resolvedRif,\n      ticket_bcv: formData.ticket_bcv,\n      environment_id: formData.environment_id ? parseInt(formData.environment_id, 10) : 0,\n      product_id: formData.product_id ? parseInt(formData.product_id, 10) : 0,\n      priority: formData.priority_id ? parseInt(formData.priority_id, 10) : 0, \n      type_request: formData.type_request_id ? parseInt(formData.type_request_id, 10) : 0,\n      sla_id: 1,\n      components_id: formData.component_id ? parseInt(formData.component_id, 10) : 0,\n      subcomponents_id: formData.subcomponent_id ? parseInt(formData.subcomponent_id, 10) : 0,\n      contact_id: formData.contact_id ? parseInt(formData.contact_id, 10) : 0,\n      topic: formData.topic,\n      description: formData.description,\n      created_by: formData.created_by,\n      expired_in: formattedExpiredIn\n    };\n\n    try {\n      await apiClient('/business/ticketrequest', {\n        method: 'POST',\n        body: JSON.stringify(payload)\n      });\n\n      if (onSubmitSuccess) {\n        onSubmitSuccess();\n      }\n\n      handleClose();\n    } catch (error) {\n      console.error('Error al guardar el ticket:', error);\n    } finally {\n      setSubmitting(false);\n    }\n  };\n\n  const contactEndpoint = formData.affected_customer_id\n    ? `/business/contact?customer_id=${formData.affected_customer_id}`\n    : '';\n\n  return (\n    <Dialog\n      open={open}\n      onClose={handleClose}\n      maxWidth="md"\n      fullWidth\n      PaperProps={{ style: { borderRadius: '20px', padding: '8px' } }}\n    >\n      <DialogTitle className="flex justify-between items-center border-b border-slate-100">\n        <span className="text-base font-bold text-slate-800">Crear Nuevo Ticket</span>\n        <IconButton size="small" onClick={handleClose}>\n          <X size={18} className="text-slate-500" />\n        </IconButton>\n      </DialogTitle>\n\n      <form onSubmit={handleSubmit}>\n        <DialogContent className="space-y-4 pt-4 max-h-[75vh] overflow-y-auto">\n\n          {/* Primera Fila: Asunto y Usuario Creador (Read Only) */}\n          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">\n            <div className="md:col-span-2">\n              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Asunto</label>\n              <input\n                type="text"\n                name="topic"\n                required\n                value={formData.topic}\n                onChange={handleChange}\n                placeholder="Ej: Operaciones en proceso"\n                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"\n              />\n            </div>\n\n            <div>\n              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Creado Por</label>\n              <input\n                type="text"\n                name="created_by"\n                value={formData.created_by}\n                readOnly\n                disabled\n                className="w-full px-3 py-2 text-xs border border-slate-200 bg-slate-100 text-slate-500 rounded-xl cursor-not-allowed focus:outline-none"\n              />\n            </div>\n          </div>\n\n          {/* Segunda Fila: Cliente Afectado, Contacto, Ticket BCV y Fecha de Vencimiento */}\n          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">\n            <SelectAsync\n              label="Cliente Afectado"\n              name="affected_customer_id"\n              value={formData.affected_customer_id}\n              endpoint="/business/customers"\n              onChange={handleChange}\n              required\n            />\n\n            {/* Condicionamos el renderizado o deshabilitado explícito para no disparar llamadas vacías */}\n            {formData.affected_customer_id ? (\n              <SelectAsync\n                label="Contacto"\n                name="contact_id"\n                value={formData.contact_id}\n                endpoint={contactEndpoint}\n                onChange={handleChange}\n              />\n            ) : (\n              <div>\n                <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Contacto</label>\n                <select\n                  disabled\n                  className="w-full px-3 py-2 text-xs border border-slate-200 bg-slate-100 text-slate-400 rounded-xl cursor-not-allowed focus:outline-none"\n                >\n                  <option>-- Seleccione un cliente --</option>\n                </select>\n              </div>\n            )}\n\n            <div>\n              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Ticket BCV (Si aplica)</label>\n              <input\n                type="text"\n                name="ticket_bcv"\n                value={formData.ticket_bcv}\n                onChange={handleChange}\n                placeholder="Ej: 109087"\n                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"\n              />\n            </div>\n\n            <div>\n              <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Fecha de Vencimiento</label>\n              <input\n                type="date"\n                name="expired_in"\n                value={formData.expired_in}\n                onChange={handleChange}\n                className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-700"\n              />\n            </div>\n          </div>\n\n          {/* Tercera Fila: Producto, Componente, Subcomponente */}\n          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">\n            <SelectAsync\n              label="Producto"\n              name="product_id"\n              value={formData.product_id}\n              endpoint="/component/products"\n              onChange={handleChange}\n              required\n            />\n            <SelectAsync\n              label="Componente"\n              name="component_id"\n              value={formData.component_id}\n              endpoint="/component/product_components"\n              onChange={handleChange}\n              required\n            />\n            <SelectAsync\n              label="Subcomponente"\n              name="subcomponent_id"\n              value={formData.subcomponent_id}\n              endpoint="/component/subcomponents"\n              onChange={handleChange}\n            />\n          </div>\n\n          {/* Cuarta Fila: Ambiente, Tipo de Solicitud, Prioridad */}\n          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">\n            <SelectAsync\n              label="Ambiente"\n              name="environment_id"\n              value={formData.environment_id}\n              endpoint="/component/enviroments"\n              onChange={handleChange}\n              required\n            />\n            <SelectAsync\n              label="Tipo de Solicitud"\n              name="type_request_id"\n              value={formData.type_request_id}\n              endpoint="/component/typerequest"\n              onChange={handleChange}\n              required\n            />\n            <SelectAsync\n              label="Prioridad"\n              name="priority_id"\n              value={formData.priority_id}\n              endpoint="/component/priority"\n              onChange={handleChange}\n              required\n            />\n          </div>\n\n          {/* Quinta Fila: Descripción */}\n          <div>\n            <label className="block text-xs font-bold text-slate-600 uppercase mb-1">Descripción</label>\n            <textarea\n              name="description"\n              rows={4}\n              required\n              value={formData.description}\n              onChange={handleChange}\n              placeholder="Detalla los pasos o inconsistencias observadas..."\n              className="w-full px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 resize-none"\n            />\n          </div>\n\n        </DialogContent>\n\n        <DialogActions className="p-4 border-t border-slate-100 flex gap-2">\n          <button\n            type="button"\n            onClick={handleClose}\n            disabled={submitting}\n            className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-all"\n          >\n            Cancelar\n          </button>\n          <button\n            type="submit"\n            disabled={submitting}\n            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white text-xs font-semibold rounded-xl transition-all shadow-sm"\n          >\n            {submitting ? 'Guardando...' : 'Guardar Registro'}\n          </button>\n        </DialogActions>\n      </form>\n    </Dialog>\n  );\n}	V123456789	7	1	1	1	2026-10-05 20:15:39.296811	2026-10-23 00:00:00
+351C1BC690BC6	J123456987	123768	1	1	2	\N	ACTUALIZACION DEL TICKET DE KAFKA 3	Todo Funcionando por aqui nice	V123456789	5	1	1	1	2026-10-05 20:21:35.487321	2026-10-27 15:28:00
 \.
 
 
@@ -1298,7 +1315,7 @@ SELECT pg_catalog.setval('public.collectives_id_seq', 1, false);
 -- Name: components_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.components_id_seq', 3, true);
+SELECT pg_catalog.setval('public.components_id_seq', 4, true);
 
 
 --
@@ -1326,7 +1343,7 @@ SELECT pg_catalog.setval('public.customers_id_seq', 12, true);
 -- Name: departament_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.departament_id_seq', 3, true);
+SELECT pg_catalog.setval('public.departament_id_seq', 4, true);
 
 
 --
@@ -1347,7 +1364,7 @@ SELECT pg_catalog.setval('public.item_activities_id_seq', 11, true);
 -- Name: notes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.notes_id_seq', 1, false);
+SELECT pg_catalog.setval('public.notes_id_seq', 12, true);
 
 
 --
@@ -1389,7 +1406,7 @@ SELECT pg_catalog.setval('public.roles_id_seq', 27, true);
 -- Name: sla_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.sla_id_seq', 1, true);
+SELECT pg_catalog.setval('public.sla_id_seq', 2, true);
 
 
 --
@@ -1403,7 +1420,7 @@ SELECT pg_catalog.setval('public.status_id_seq', 5, true);
 -- Name: subcomponents_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.subcomponents_id_seq', 1, true);
+SELECT pg_catalog.setval('public.subcomponents_id_seq', 2, true);
 
 
 --
@@ -1898,6 +1915,14 @@ ALTER TABLE ONLY public.task_request
 
 
 --
+-- Name: notes fk_created_by_notes; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.notes
+    ADD CONSTRAINT fk_created_by_notes FOREIGN KEY (created_by) REFERENCES public.users(id) ON UPDATE CASCADE;
+
+
+--
 -- Name: customer_product_roles fk_customer; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2141,5 +2166,5 @@ ALTER TABLE ONLY public.collectives
 -- PostgreSQL database dump complete
 --
 
-\unrestrict mKZcBdBxtVvV3bk4VkpveXUhWRQtydvAvxQKZuxvqGf2N5e2ofSfJqI22o2r7rg
+\unrestrict fawbEL1nbkCBVtSTNFIygGCoAeF9snInBNv8903b5roOlYvpbFeb4GrAftCN7qs
 
