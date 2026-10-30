@@ -25,7 +25,7 @@ func (r *NotesRepo) GetByTaskId(ctx context.Context, task_id string) ([]*busines
 			created_by,
 			created_at
 		FROM notes
-		WHERE task_id = $1`
+		WHERE task_id = $1 order by created_at desc`
 
 	rows, err := r.DB.QueryContext(ctx, query, task_id)
 	if err != nil {
